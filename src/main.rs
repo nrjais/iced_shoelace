@@ -28,6 +28,7 @@ struct Gallery {
 #[derive(Debug, Clone)]
 pub enum Message {
     ButtonPressed(String),
+    SwitchTheme(Theme),
 }
 
 impl Gallery {
@@ -39,6 +40,10 @@ impl Gallery {
                     "Button '{}' pressed! Total clicks: {}",
                     label, self.button_count
                 );
+                Task::none()
+            }
+            Message::SwitchTheme(theme) => {
+                self.theme = theme;
                 Task::none()
             }
         }

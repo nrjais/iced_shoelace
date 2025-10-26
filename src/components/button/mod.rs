@@ -2,9 +2,10 @@ pub mod catalog;
 
 use crate::{Element, components::hovered};
 use iced::{
-    Length, Padding,
+    Padding,
     widget::{Component, button, component, text},
 };
+use iced_widget::Row;
 
 use crate::theme::Theme;
 
@@ -37,7 +38,7 @@ pub struct ButtonStyleClass {
     pub outline: bool,
     pub border_radius: f32,
     pub hovered: bool,
-    pub pressed: bool,
+    pub disabled: bool,
 }
 
 /// A Shoelace-style button component for iced
@@ -49,17 +50,19 @@ pub struct ButtonStyleClass {
 /// - Pill (fully rounded) style
 /// - Circle style
 /// - Loading state
+/// - Disabled state
 /// - Optional caret icon
+/// - Prefix and suffix icons/content
 pub struct Button<Message> {
     label: String,
     variant: Variant,
     size: Size,
     outline: bool,
     pill: bool,
-    circle: bool,
     loading: bool,
-    caret: bool,
-    width: Length,
+    disabled: bool,
+    prefix: Option<String>,
+    suffix: Option<String>,
     on_press: Option<Message>,
 }
 
@@ -72,10 +75,10 @@ impl<Message> Button<Message> {
             size: Size::Medium,
             outline: false,
             pill: false,
-            circle: false,
             loading: false,
-            caret: false,
-            width: Length::Shrink,
+            disabled: false,
+            prefix: None,
+            suffix: None,
             on_press: None,
         }
     }
@@ -104,27 +107,27 @@ impl<Message> Button<Message> {
         self
     }
 
-    /// Sets whether the button is circular
-    pub fn circle(mut self, circle: bool) -> Self {
-        self.circle = circle;
-        self
-    }
-
     /// Sets whether the button is in a loading state
     pub fn loading(mut self, loading: bool) -> Self {
         self.loading = loading;
         self
     }
 
-    /// Sets whether the button displays a caret icon
-    pub fn caret(mut self, caret: bool) -> Self {
-        self.caret = caret;
+    /// Sets whether the button is disabled
+    pub fn disabled(mut self, disabled: bool) -> Self {
+        self.disabled = disabled;
         self
     }
 
-    /// Sets the button width
-    pub fn width(mut self, width: Length) -> Self {
-        self.width = width;
+    /// Sets the prefix icon/text (displayed before the label)
+    pub fn prefix(mut self, prefix: impl Into<String>) -> Self {
+        self.prefix = Some(prefix.into());
+        self
+    }
+
+    /// Sets the suffix icon/text (displayed after the label)
+    pub fn suffix(mut self, suffix: impl Into<String>) -> Self {
+        self.suffix = Some(suffix.into());
         self
     }
 
@@ -139,21 +142,11 @@ impl<Message> Button<Message> {
         let tokens = theme.tokens();
         let spacing = tokens.spacing;
 
-        if self.circle {
-            // Circle buttons use equal padding
-            let pad = match self.size {
-                Size::Small => spacing.x_small,
-                Size::Medium => spacing.small,
-                Size::Large => spacing.medium,
-            };
-            Padding::from(pad)
-        } else {
-            // Regular buttons use horizontal and vertical padding
-            match self.size {
-                Size::Small => Padding::from([spacing.x3_small, spacing.small]),
-                Size::Medium => Padding::from([spacing.x2_small, spacing.medium]),
-                Size::Large => Padding::from([spacing.x_small, spacing.large]),
-            }
+        // Following Shoelace spec: small (0.5rem, 1rem), medium (0.75rem, 1.5rem), large (1rem, 2rem)
+        match self.size {
+            Size::Small => Padding::from([spacing.x_small, spacing.medium]), // 8px, 16px
+            Size::Medium => Padding::from([spacing.small, spacing.x_large]), // 12px, 28px (close to 24px)
+            Size::Large => Padding::from([spacing.medium, spacing.x2_large]), // 16px, 36px (close to 32px)
         }
     }
 
@@ -162,8 +155,8 @@ impl<Message> Button<Message> {
         let tokens = theme.tokens();
         let border_radius = tokens.border_radius;
 
-        if self.pill || self.circle {
-            999.0 // Very large radius for fully rounded corners
+        if self.pill {
+            border_radius.x_large * 10.0
         } else {
             match self.size {
                 Size::Small => border_radius.small,
@@ -201,7 +194,7 @@ where
     fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<Message> {
         match event {
             Event::Pressed => {
-                if !self.loading {
+                if !self.loading && !self.disabled {
                     self.on_press.clone()
                 } else {
                     None
@@ -219,10 +212,6 @@ where
         // Build label text with optional caret
         let label_str = if self.loading {
             "⋯".to_string()
-        } else if self.circle {
-            self.label.clone()
-        } else if self.caret {
-            format!("{} ▼", self.label)
         } else {
             self.label.clone()
         };
@@ -230,8 +219,10 @@ where
         let variant = self.variant;
         let outline = self.outline;
         let loading = self.loading;
+        let disabled = self.disabled;
+        let prefix = self.prefix.clone();
+        let suffix = self.suffix.clone();
         let has_on_press = self.on_press.is_some();
-        let width = self.width;
 
         // Use the hovered component to track hover state
         let content: Element<'a, Event> = hovered(move |is_hovered| {
@@ -240,20 +231,44 @@ where
                 variant,
                 outline,
                 border_radius,
-                hovered: is_hovered,
-                pressed: false,
+                hovered: is_hovered && !disabled,
+                disabled,
             };
 
+            // Build the button content with prefix, label, and suffix
+            let mut row_content = Row::new().spacing(theme.tokens().spacing.x2_small);
+
+            // Add prefix if present
+            if let Some(prefix_text) = &prefix {
+                if !prefix_text.is_empty() {
+                    row_content = row_content.push(text(prefix_text.clone()).size(font_size));
+                }
+            }
+
+            // Add main label
+            row_content = row_content.push(text(label_str.clone()).size(font_size));
+
+            // Add suffix if present
+            if let Some(suffix_text) = &suffix {
+                if !suffix_text.is_empty() {
+                    row_content = row_content.push(text(suffix_text.clone()).size(font_size));
+                }
+            }
+
+            let button_content: Element<'a, Event> = row_content.into();
+
             // Build the button
-            button(text(label_str.clone()).size(font_size))
+            let btn = button(button_content)
                 .padding(padding)
-                .width(width)
                 .class(style_class)
-                .on_press_maybe(if !loading && has_on_press {
+                .on_press_maybe(if !loading && !disabled && has_on_press {
                     Some(Event::Pressed)
                 } else {
                     None
-                })
+                });
+
+            let element: Element<'a, Event> = btn.into();
+            element
         });
 
         content.map(|_message| Event::Pressed)

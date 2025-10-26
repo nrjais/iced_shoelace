@@ -1,12 +1,18 @@
 use iced::{Length, alignment};
-use iced_widget::{Row, column, container, text};
+use iced_widget::{Row, column, text};
 
 use crate::components::button::{Button, Size, Variant};
+use crate::components::scrollable;
+use crate::theme::{ScrollableClass, Theme};
 use crate::{Element, Message};
 
 pub fn view(button_count: usize) -> Element<'static, Message> {
     let title = text("Shoelace Button Gallery").size(32).width(Length::Fill);
 
+    let theme_dark = Button::new("Dark Theme").on_press(Message::SwitchTheme(Theme::Dark));
+    let theme_light = Button::new("Light Theme").on_press(Message::SwitchTheme(Theme::Light));
+
+    let theme_row = Row::with_children([theme_dark.into(), theme_light.into()]).spacing(10);
     // Variants section
     let variants_title = text("Variants").size(24);
     let variants_row = Row::with_children([
@@ -106,27 +112,6 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     ])
     .spacing(10);
 
-    // Circle buttons
-    let circle_title = text("Circle").size(24);
-    let circle_row = Row::with_children([
-        Button::new("X")
-            .variant(Variant::Default)
-            .circle(true)
-            .on_press(Message::ButtonPressed("Circle Default".into()))
-            .into(),
-        Button::new("✓")
-            .variant(Variant::Success)
-            .circle(true)
-            .on_press(Message::ButtonPressed("Circle Success".into()))
-            .into(),
-        Button::new("✕")
-            .variant(Variant::Danger)
-            .circle(true)
-            .on_press(Message::ButtonPressed("Circle Danger".into()))
-            .into(),
-    ])
-    .spacing(10);
-
     // Text buttons
     let text_title = text("Text Buttons").size(24);
     let text_row = Row::with_children([
@@ -149,20 +134,122 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
             .loading(true)
             .on_press(Message::ButtonPressed("Loading".into()))
             .into(),
-        Button::new("Disabled").variant(Variant::Primary).into(),
-        Button::new("With Caret")
+        Button::new("Disabled")
             .variant(Variant::Primary)
-            .caret(true)
-            .on_press(Message::ButtonPressed("Caret".into()))
+            .disabled(true)
+            .on_press(Message::ButtonPressed("Disabled".into()))
             .into(),
     ])
     .spacing(10);
+
+    // Prefix and Suffix section
+    let prefix_suffix_title = text("Prefix & Suffix").size(24);
+    let prefix_suffix_row = Row::with_children([
+        Button::new("Settings")
+            .variant(Variant::Primary)
+            .prefix("⚙")
+            .on_press(Message::ButtonPressed("Settings".into()))
+            .into(),
+        Button::new("Download")
+            .variant(Variant::Success)
+            .suffix("↓")
+            .on_press(Message::ButtonPressed("Download".into()))
+            .into(),
+        Button::new("Delete")
+            .variant(Variant::Danger)
+            .prefix("🗑")
+            .suffix("×")
+            .on_press(Message::ButtonPressed("Delete".into()))
+            .into(),
+    ])
+    .spacing(10);
+
+    // Disabled variants section
+    let disabled_title = text("Disabled Variants").size(24);
+    let disabled_row = Row::with_children([
+        Button::new("Primary")
+            .variant(Variant::Primary)
+            .disabled(true)
+            .into(),
+        Button::new("Success")
+            .variant(Variant::Success)
+            .disabled(true)
+            .into(),
+        Button::new("Danger")
+            .variant(Variant::Danger)
+            .disabled(true)
+            .into(),
+        Button::new("Outline")
+            .variant(Variant::Primary)
+            .outline(true)
+            .disabled(true)
+            .into(),
+        Button::new("Text")
+            .variant(Variant::Text)
+            .disabled(true)
+            .into(),
+    ])
+    .spacing(10);
+
+    // Scrollable styles section
+    let scrollable_title = text("Scrollable Styles").size(24);
+    let scrollable_desc =
+        text("This demo shows different scrollable styles using Shoelace tokens").size(14);
+
+    // Create small scrollable areas to demonstrate styles
+    let default_scrollable = {
+        let content = column![
+            text("Default Scrollable").size(16),
+            text("Visible rail with medium scroller"),
+            text("Line 1"),
+            text("Line 2"),
+            text("Line 3"),
+            text("Line 4"),
+            text("Line 5"),
+            text("Line 6"),
+            text("Line 7"),
+            text("Line 8"),
+        ]
+        .spacing(5)
+        .padding(10);
+
+        scrollable(content)
+            .class(ScrollableClass::Default)
+            .height(120)
+            .width(200)
+    };
+
+    let subtle_scrollable = {
+        let content = column![
+            text("Subtle Scrollable").size(16),
+            text("Rail appears on hover"),
+            text("Line 1"),
+            text("Line 2"),
+            text("Line 3"),
+            text("Line 4"),
+            text("Line 5"),
+            text("Line 6"),
+            text("Line 7"),
+            text("Line 8"),
+        ]
+        .spacing(5)
+        .padding(10);
+
+        scrollable(content)
+            .class(ScrollableClass::Subtle)
+            .height(120)
+            .width(200)
+    };
+
+    let scrollable_row =
+        Row::with_children([default_scrollable.into(), subtle_scrollable.into()]).spacing(20);
 
     // Click counter
     let counter = text(format!("Total button clicks: {}", button_count)).size(18);
 
     let content = column![
         title,
+        theme_row,
         variants_title,
         variants_row,
         sizes_title,
@@ -171,19 +258,21 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
         outline_row,
         pill_title,
         pill_row,
-        circle_title,
-        circle_row,
         text_title,
         text_row,
         states_title,
         states_row,
+        prefix_suffix_title,
+        prefix_suffix_row,
+        disabled_title,
+        disabled_row,
+        scrollable_title,
+        scrollable_desc,
+        scrollable_row,
         counter,
     ]
     .spacing(20)
-    .padding(30);
+    .padding(8);
 
-    container(content)
-        .width(Length::Fill)
-        .height(Length::Fill)
-        .into()
+    scrollable(content).into()
 }

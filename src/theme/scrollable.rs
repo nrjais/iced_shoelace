@@ -34,6 +34,7 @@ impl scrollable::Catalog for Theme {
             shadow: iced::Shadow::default(),
             snap: false,
         };
+        let width = if is_active { 2.0 } else { 4.0 };
 
         // Rail and scroller styling based on class
         let (rail_bg, scroller_color, scroller_border) = match class {
@@ -56,23 +57,19 @@ impl scrollable::Catalog for Theme {
                     scroller_color,
                     iced::Border {
                         color: iced::Color::TRANSPARENT,
-                        width: 2.0,
+                        width,
                         radius: tokens.border_radius.large.into(),
                     },
                 )
             }
             ScrollableClass::Subtle => {
                 // Subtle style - rail appears only on hover
-                let rail_bg = if is_active {
-                    Some(iced::Background::Color(tokens.neutral.c100))
-                } else {
-                    Some(iced::Background::Color(tokens.neutral.c50))
-                };
+                let rail_bg = None;
 
                 let scroller_color = if is_active {
                     tokens.neutral.c600
                 } else {
-                    iced::Color::TRANSPARENT
+                    tokens.neutral.c500
                 };
 
                 (
@@ -80,14 +77,14 @@ impl scrollable::Catalog for Theme {
                     scroller_color,
                     iced::Border {
                         color: iced::Color::TRANSPARENT,
-                        width: 2.0,
+                        width,
                         radius: tokens.border_radius.large.into(),
                     },
                 )
             }
         };
 
-        let width = if is_active { 0.0 } else { 2.0 };
+        let width = if is_active { 0.0 } else { 4.0 };
 
         scrollable::Style {
             container,
