@@ -1,5 +1,3 @@
-pub mod catalog;
-
 use crate::{Element, components::hovered};
 use iced::{
     Padding,

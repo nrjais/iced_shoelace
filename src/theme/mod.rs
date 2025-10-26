@@ -5,6 +5,7 @@ use crate::theme::tokens::Tokens;
 pub mod pallete;
 pub mod scrollable;
 pub mod tokens;
+pub mod button;
 
 pub use scrollable::ScrollableClass;
 
