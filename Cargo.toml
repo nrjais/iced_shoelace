@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 iced = { git = "https://github.com/nrjais/iced", branch = "editor", features = [
   "advanced",
+  "debug",
   "highlighter",
   "lazy",
   "sipper",
