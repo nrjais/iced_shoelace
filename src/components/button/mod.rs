@@ -1,7 +1,8 @@
 use crate::{Element, components::hovered};
 use iced::{
     Padding,
-    widget::{Component, button, component, text},
+    border::Radius,
+    widget::{self, Component, component, text},
 };
 use iced_widget::Row;
 
@@ -34,7 +35,7 @@ pub enum Size {
 pub struct ButtonStyleClass {
     pub variant: Variant,
     pub outline: bool,
-    pub border_radius: f32,
+    pub border_radius: Radius,
     pub hovered: bool,
     pub disabled: bool,
 }
@@ -62,6 +63,7 @@ pub struct Button<Message> {
     prefix: Option<String>,
     suffix: Option<String>,
     on_press: Option<Message>,
+    custom_border_radius: Option<Radius>,
 }
 
 impl<Message> Button<Message> {
@@ -78,7 +80,14 @@ impl<Message> Button<Message> {
             prefix: None,
             suffix: None,
             on_press: None,
+            custom_border_radius: None,
         }
+    }
+
+    /// Sets a custom border radius for the button (used by button groups)
+    pub fn border_radius(mut self, radius: Radius) -> Self {
+        self.custom_border_radius = Some(radius);
+        self
     }
 
     /// Sets the button variant
@@ -149,11 +158,16 @@ impl<Message> Button<Message> {
     }
 
     /// Gets the appropriate border radius
-    fn get_border_radius(&self, theme: &Theme) -> f32 {
+    fn get_border_radius(&self, theme: &Theme) -> Radius {
+        // Use custom border radius if set (for button groups)
+        if let Some(custom_radius) = self.custom_border_radius {
+            return custom_radius;
+        }
+
         let tokens = theme.tokens();
         let border_radius = tokens.border_radius;
 
-        if self.pill {
+        let radius = if self.pill {
             border_radius.x_large * 10.0
         } else {
             match self.size {
@@ -161,7 +175,9 @@ impl<Message> Button<Message> {
                 Size::Medium => border_radius.medium,
                 Size::Large => border_radius.large,
             }
-        }
+        };
+
+        Radius::from(radius)
     }
 
     /// Gets the appropriate font size
@@ -256,7 +272,7 @@ where
             let button_content: Element<'a, Event> = row_content.into();
 
             // Build the button
-            let btn = button(button_content)
+            let btn = widget::button(button_content)
                 .padding(padding)
                 .class(style_class)
                 .on_press_maybe(if !loading && !disabled && has_on_press {
@@ -283,34 +299,36 @@ where
 }
 
 // Convenience constructors for common button types
-impl<Message> Button<Message> {
+pub mod button {
+    use crate::components::button::{Button, Variant};
+
     /// Creates a new primary button
-    pub fn primary(label: impl Into<String>) -> Self {
-        Self::new(label).variant(Variant::Primary)
+    pub fn primary<Message>(label: impl Into<String>) -> Button<Message> {
+        Button::new(label).variant(Variant::Primary)
     }
 
     /// Creates a new success button
-    pub fn success(label: impl Into<String>) -> Self {
-        Self::new(label).variant(Variant::Success)
+    pub fn success<Message>(label: impl Into<String>) -> Button<Message> {
+        Button::new(label).variant(Variant::Success)
     }
 
     /// Creates a new danger button
-    pub fn danger(label: impl Into<String>) -> Self {
-        Self::new(label).variant(Variant::Danger)
+    pub fn danger<Message>(label: impl Into<String>) -> Button<Message> {
+        Button::new(label).variant(Variant::Danger)
     }
 
     /// Creates a new warning button
-    pub fn warning(label: impl Into<String>) -> Self {
-        Self::new(label).variant(Variant::Warning)
+    pub fn warning<Message>(label: impl Into<String>) -> Button<Message> {
+        Button::new(label).variant(Variant::Warning)
     }
 
     /// Creates a new neutral button
-    pub fn neutral(label: impl Into<String>) -> Self {
-        Self::new(label).variant(Variant::Neutral)
+    pub fn neutral<Message>(label: impl Into<String>) -> Button<Message> {
+        Button::new(label).variant(Variant::Neutral)
     }
 
     /// Creates a new text button
-    pub fn text_button(label: impl Into<String>) -> Self {
-        Self::new(label).variant(Variant::Text)
+    pub fn text_button<Message>(label: impl Into<String>) -> Button<Message> {
+        Button::new(label).variant(Variant::Text)
     }
 }

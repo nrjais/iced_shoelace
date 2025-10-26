@@ -2,6 +2,7 @@ use iced::{Length, alignment};
 use iced_widget::{Row, column, text};
 
 use crate::components::button::{Button, Size, Variant};
+use crate::components::button_group::button_group_with;
 use crate::components::scrollable;
 use crate::theme::{ScrollableClass, Theme};
 use crate::{Element, Message};
@@ -164,6 +165,73 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     ])
     .spacing(10);
 
+    // Button Groups section
+    let button_groups_title = text("Button Groups").size(24);
+    let button_groups_desc = text("Group related buttons together").size(14);
+
+    // Basic button group
+    let basic_group = button_group_with(vec![
+        Button::new("Left")
+            .variant(Variant::Primary)
+            .on_press(Message::ButtonPressed("Group Left".into())),
+        Button::new("Middle")
+            .variant(Variant::Primary)
+            .on_press(Message::ButtonPressed("Group Middle".into())),
+        Button::new("Right")
+            .variant(Variant::Primary)
+            .on_press(Message::ButtonPressed("Group Right".into())),
+    ]);
+
+    // Button group with label
+    let labeled_group = button_group_with(vec![
+        Button::new("Bold")
+            .variant(Variant::Neutral)
+            .on_press(Message::ButtonPressed("Bold".into())),
+        Button::new("Italic")
+            .variant(Variant::Neutral)
+            .on_press(Message::ButtonPressed("Italic".into())),
+        Button::new("Underline")
+            .variant(Variant::Neutral)
+            .on_press(Message::ButtonPressed("Underline".into())),
+    ])
+    .label("Text Formatting");
+
+    // Button group with different variants
+    let action_group = button_group_with(vec![
+        Button::new("View")
+            .variant(Variant::Primary)
+            .on_press(Message::ButtonPressed("View".into())),
+        Button::new("Edit")
+            .variant(Variant::Success)
+            .on_press(Message::ButtonPressed("Edit".into())),
+        Button::new("Delete")
+            .variant(Variant::Danger)
+            .on_press(Message::ButtonPressed("Delete Group".into())),
+    ])
+    .label("Actions");
+
+    // Button group with outline buttons
+    let outline_group = button_group_with(vec![
+        Button::new("One")
+            .variant(Variant::Primary)
+            .outline(true)
+            .on_press(Message::ButtonPressed("One".into())),
+        Button::new("Two")
+            .variant(Variant::Primary)
+            .outline(true)
+            .on_press(Message::ButtonPressed("Two".into())),
+        Button::new("Three")
+            .variant(Variant::Primary)
+            .outline(true)
+            .on_press(Message::ButtonPressed("Three".into())),
+    ]);
+
+    let button_groups_row =
+        Row::with_children([basic_group.into(), labeled_group.into()]).spacing(20);
+
+    let button_groups_row2 =
+        Row::with_children([action_group.into(), outline_group.into()]).spacing(20);
+
     // Disabled variants section
     let disabled_title = text("Disabled Variants").size(24);
     let disabled_row = Row::with_children([
@@ -264,6 +332,10 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
         states_row,
         prefix_suffix_title,
         prefix_suffix_row,
+        button_groups_title,
+        button_groups_desc,
+        button_groups_row,
+        button_groups_row2,
         disabled_title,
         disabled_row,
         scrollable_title,

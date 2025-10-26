@@ -13,7 +13,7 @@ impl button::Catalog for Theme {
         ButtonStyleClass {
             variant: Variant::Default,
             outline: false,
-            border_radius: 4.0,
+            border_radius: iced::border::Radius::from(4.0),
             hovered: false,
             disabled: false,
         }
@@ -140,7 +140,7 @@ impl button::Catalog for Theme {
                 } else {
                     0.0
                 },
-                radius: class.border_radius.into(),
+                radius: class.border_radius,
             },
             shadow,
             snap: false,
