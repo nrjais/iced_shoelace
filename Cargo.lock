@@ -89,6 +89,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.100"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
+
+[[package]]
 name = "arrayref"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -274,6 +280,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "bincode"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36eaf5d7b090263e8150820482d5d93cd964a81e4019913c972f4edcc6edb740"
+dependencies = [
+ "bincode_derive",
+ "serde",
+ "unty",
+]
+
+[[package]]
+name = "bincode_derive"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf95709a440f45e986983918d0e8a1f30a9b1df04918fc828670606804ac3c09"
+dependencies = [
+ "virtue",
+]
+
+[[package]]
 name = "bit-set"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -396,6 +422,17 @@ dependencies = [
  "rustix 0.38.44",
  "wayland-backend",
  "wayland-client",
+]
+
+[[package]]
+name = "cargo-hot-protocol"
+version = "0.1.0"
+source = "git+https://github.com/hecrj/cargo-hot.git?rev=b8dc518b8640928178a501257e353b73bc06cf47#b8dc518b8640928178a501257e353b73bc06cf47"
+dependencies = [
+ "anyhow",
+ "bincode 2.0.1",
+ "log",
+ "subsecond",
 ]
 
 [[package]]
@@ -1229,7 +1266,7 @@ name = "iced_beacon"
 version = "0.14.0-dev"
 source = "git+https://github.com/nrjais/iced?branch=editor#9188e121bb593f466f7979d00591f408ca78ed78"
 dependencies = [
- "bincode",
+ "bincode 1.3.3",
  "futures",
  "iced_core",
  "log",
@@ -1262,6 +1299,7 @@ name = "iced_debug"
 version = "0.14.0-dev"
 source = "git+https://github.com/nrjais/iced?branch=editor#9188e121bb593f466f7979d00591f408ca78ed78"
 dependencies = [
+ "cargo-hot-protocol",
  "iced_beacon",
  "iced_core",
  "iced_futures",
@@ -1615,6 +1653,15 @@ name = "memchr"
 version = "2.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
+
+[[package]]
+name = "memfd"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ad38eb12aea514a0466ea40a80fd8cc83637065948eb4a426e4aa46261175227"
+dependencies = [
+ "rustix 1.1.2",
+]
 
 [[package]]
 name = "memmap2"
@@ -2892,6 +2939,34 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6637bab7722d379c8b41ba849228d680cc12d0a45ba1fa2b48f2a30577a06731"
 
 [[package]]
+name = "subsecond"
+version = "0.7.0-rc.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d8102982e5ba0a355d992cd55b14a67df4ac6916b4ca119e8851f9673a94b0b"
+dependencies = [
+ "js-sys",
+ "libc",
+ "libloading",
+ "memfd",
+ "memmap2",
+ "serde",
+ "subsecond-types",
+ "thiserror 2.0.17",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
+name = "subsecond-types"
+version = "0.7.0-rc.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38d92e6854bebf39abe8afb71ab99460f87ffcaed25ec08a6f4f9fa5da6ac8ec"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "svg_fmt"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2925,7 +3000,7 @@ version = "5.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "656b45c05d95a5704399aeef6bd0ddec7b2b3531b7c9e900abbf7c4d2190c925"
 dependencies = [
- "bincode",
+ "bincode 1.3.3",
  "flate2",
  "fnv",
  "once_cell",
@@ -3267,6 +3342,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4ac048d71ede7ee76d585517add45da530660ef4390e49b098733c6e897f254"
 
 [[package]]
+name = "unty"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d49784317cd0d1ee7ec5c716dd598ec5b4483ea832a2dced265471cc0f690ae"
+
+[[package]]
 name = "uuid"
 version = "1.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3282,6 +3363,12 @@ name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+
+[[package]]
+name = "virtue"
+version = "0.0.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "051eb1abcf10076295e815102942cc58f9d5e3b4560e46e53c21e8ff6f3af7b1"
 
 [[package]]
 name = "walkdir"

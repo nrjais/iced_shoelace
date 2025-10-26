@@ -3,7 +3,11 @@ use iced::theme;
 use crate::theme::tokens::Tokens;
 
 pub mod pallete;
+pub mod scrollable;
 pub mod tokens;
+
+// Re-export commonly used types
+pub use scrollable::ScrollableClass;
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum Theme {

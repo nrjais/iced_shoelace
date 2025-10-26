@@ -35,7 +35,10 @@ impl Gallery {
         match message {
             Message::ButtonPressed(label) => {
                 self.button_count += 1;
-                println!("Button '{}' pressed! Total clicks: {}", label, self.button_count);
+                println!(
+                    "Button '{}' pressed! Total clicks: {}",
+                    label, self.button_count
+                );
                 Task::none()
             }
         }

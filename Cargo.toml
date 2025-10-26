@@ -3,6 +3,9 @@ name = "iced-shoelace"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+default = ["iced/hot"]
+
 [dependencies]
 iced = { git = "https://github.com/nrjais/iced", branch = "editor", features = [
   "advanced",
@@ -14,6 +17,7 @@ iced = { git = "https://github.com/nrjais/iced", branch = "editor", features = [
   "web-colors",
   "wgpu",
 ] }
+
 iced_core = { git = "https://github.com/nrjais/iced", branch = "editor", features = [
   "advanced",
 ] }
