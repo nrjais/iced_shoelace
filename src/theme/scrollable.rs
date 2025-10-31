@@ -1,6 +1,6 @@
 use iced_widget::{container, scrollable};
 
-use crate::theme::Theme;
+use crate::theme::{Theme, sizes::BORDER_RADIUS};
 
 /// Scrollbar style class
 #[derive(Debug, Clone, Copy, Default)]
@@ -58,7 +58,7 @@ impl scrollable::Catalog for Theme {
                     iced::Border {
                         color: iced::Color::TRANSPARENT,
                         width,
-                        radius: tokens.border_radius.large.into(),
+                        radius: BORDER_RADIUS.large.into(),
                     },
                 )
             }
@@ -78,7 +78,7 @@ impl scrollable::Catalog for Theme {
                     iced::Border {
                         color: iced::Color::TRANSPARENT,
                         width,
-                        radius: tokens.border_radius.large.into(),
+                        radius: BORDER_RADIUS.large.into(),
                     },
                 )
             }
@@ -93,7 +93,7 @@ impl scrollable::Catalog for Theme {
                 border: iced::Border {
                     color: iced::Color::TRANSPARENT,
                     width,
-                    radius: tokens.border_radius.large.into(),
+                    radius: BORDER_RADIUS.large.into(),
                 },
                 scroller: scrollable::Scroller {
                     color: scroller_color,
@@ -105,7 +105,7 @@ impl scrollable::Catalog for Theme {
                 border: iced::Border {
                     color: iced::Color::TRANSPARENT,
                     width,
-                    radius: tokens.border_radius.large.into(),
+                    radius: BORDER_RADIUS.large.into(),
                 },
                 scroller: scrollable::Scroller {
                     color: scroller_color,

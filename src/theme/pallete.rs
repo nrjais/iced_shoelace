@@ -1,9 +1,6 @@
 use iced::Color;
 
-use crate::theme::tokens::{
-    BorderRadius, FontSize, FontWeight, InputHeight, LineHeight, Spacing, ToggleSize, Tokens,
-    Transition, ZIndex,
-};
+use crate::theme::tokens::{ColorScale, Tokens};
 /// Converts HSL color values to RGB Color
 /// h: hue in degrees (0-360)
 /// s: saturation as percentage (0-100)
@@ -594,6 +591,93 @@ pub mod light {
     pub const NEUTRAL_1000: Color = hsl(0.0, 0.0, 0.0);
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ColorValue {
+    C50,
+    C100,
+    C200,
+    C300,
+    C400,
+    C500,
+    C600,
+    C700,
+    C800,
+    C900,
+    C950,
+}
+
+impl ColorValue {
+    pub fn get_color(self, color: &ColorScale) -> Color {
+        match self {
+            ColorValue::C50 => color.c50,
+            ColorValue::C100 => color.c100,
+            ColorValue::C200 => color.c200,
+            ColorValue::C300 => color.c300,
+            ColorValue::C400 => color.c400,
+            ColorValue::C500 => color.c500,
+            ColorValue::C600 => color.c600,
+            ColorValue::C700 => color.c700,
+            ColorValue::C800 => color.c800,
+            ColorValue::C900 => color.c900,
+            ColorValue::C950 => color.c950,
+        }
+    }
+}
+
+pub enum ColorVariant {
+    Gray,
+    Red,
+    Orange,
+    Amber,
+    Yellow,
+    Lime,
+    Green,
+    Emerald,
+    Teal,
+    Cyan,
+    Sky,
+    Blue,
+    Indigo,
+    Violet,
+    Purple,
+    Fuchsia,
+    Pink,
+    Rose,
+    Neutral,
+    NeutralBase,
+    NeutralDark,
+}
+
+impl ColorVariant {
+    pub fn get_color(self, color: Tokens, value: ColorValue) -> Color {
+        let color_scale = match self {
+            ColorVariant::Gray => color.gray,
+            ColorVariant::Red => color.red,
+            ColorVariant::Orange => color.orange,
+            ColorVariant::Amber => color.amber,
+            ColorVariant::Yellow => color.yellow,
+            ColorVariant::Lime => color.lime,
+            ColorVariant::Green => color.green,
+            ColorVariant::Emerald => color.emerald,
+            ColorVariant::Teal => color.teal,
+            ColorVariant::Cyan => color.cyan,
+            ColorVariant::Sky => color.sky,
+            ColorVariant::Blue => color.blue,
+            ColorVariant::Indigo => color.indigo,
+            ColorVariant::Violet => color.violet,
+            ColorVariant::Purple => color.purple,
+            ColorVariant::Fuchsia => color.fuchsia,
+            ColorVariant::Pink => color.pink,
+            ColorVariant::Rose => color.rose,
+            ColorVariant::Neutral => color.neutral,
+            ColorVariant::NeutralBase => return color.neutral_0,
+            ColorVariant::NeutralDark => return color.neutral_1000,
+        };
+
+        value.get_color(&color_scale)
+    }
+}
+
 pub(crate) const DARK: Tokens = Tokens {
     // Color scales
     gray: dark::GRAY,
@@ -625,90 +709,6 @@ pub(crate) const DARK: Tokens = Tokens {
     // Special neutral colors
     neutral_0: dark::NEUTRAL_0,
     neutral_1000: dark::NEUTRAL_1000,
-
-    // Border radius tokens (in pixels)
-    border_radius: BorderRadius {
-        small: 3.0,    // 0.1875rem
-        medium: 4.0,   // 0.25rem
-        large: 8.0,    // 0.5rem
-        x_large: 16.0, // 1rem
-    },
-
-    // Spacing tokens (in pixels)
-    spacing: Spacing {
-        x3_small: 2.0,  // 0.125rem
-        x2_small: 4.0,  // 0.25rem
-        x_small: 8.0,   // 0.5rem
-        small: 12.0,    // 0.75rem
-        medium: 16.0,   // 1rem
-        large: 20.0,    // 1.25rem
-        x_large: 28.0,  // 1.75rem
-        x2_large: 36.0, // 2.25rem
-        x3_large: 48.0, // 3rem
-        x4_large: 72.0, // 4.5rem
-    },
-
-    // Transition durations (in milliseconds)
-    transition: Transition {
-        x_slow: 1000,
-        slow: 500,
-        medium: 250,
-        fast: 150,
-        x_fast: 50,
-    },
-
-    // Font sizes (in pixels)
-    font_size: FontSize {
-        x2_small: 10.0, // 0.625rem
-        x_small: 12.0,  // 0.75rem
-        small: 14.0,    // 0.875rem
-        medium: 16.0,   // 1rem
-        large: 20.0,    // 1.25rem
-        x_large: 24.0,  // 1.5rem
-        x2_large: 36.0, // 2.25rem
-        x3_large: 48.0, // 3rem
-        x4_large: 72.0, // 4.5rem
-    },
-
-    // Font weights
-    font_weight: FontWeight {
-        light: 300,
-        normal: 400,
-        semibold: 500,
-        bold: 700,
-    },
-
-    // Line heights
-    line_height: LineHeight {
-        denser: 1.0,
-        dense: 1.4,
-        normal: 1.8,
-        loose: 2.2,
-        looser: 2.6,
-    },
-
-    // Input heights (in pixels)
-    input_height: InputHeight {
-        small: 30.0,  // 1.875rem
-        medium: 40.0, // 2.5rem
-        large: 50.0,  // 3.125rem
-    },
-
-    // Toggle sizes (in pixels)
-    toggle_size: ToggleSize {
-        small: 14.0,  // 0.875rem
-        medium: 18.0, // 1.125rem
-        large: 22.0,  // 1.375rem
-    },
-
-    // Z-index values
-    z_index: ZIndex {
-        drawer: 700,
-        dialog: 800,
-        dropdown: 900,
-        toast: 950,
-        tooltip: 1000,
-    },
 };
 
 pub(crate) const LIGHT: Tokens = Tokens {
@@ -742,88 +742,4 @@ pub(crate) const LIGHT: Tokens = Tokens {
     // Special neutral colors
     neutral_0: light::NEUTRAL_0,
     neutral_1000: light::NEUTRAL_1000,
-
-    // Border radius tokens (in pixels)
-    border_radius: BorderRadius {
-        small: 3.0,    // 0.1875rem
-        medium: 4.0,   // 0.25rem
-        large: 8.0,    // 0.5rem
-        x_large: 16.0, // 1rem
-    },
-
-    // Spacing tokens (in pixels)
-    spacing: Spacing {
-        x3_small: 2.0,  // 0.125rem
-        x2_small: 4.0,  // 0.25rem
-        x_small: 8.0,   // 0.5rem
-        small: 12.0,    // 0.75rem
-        medium: 16.0,   // 1rem
-        large: 20.0,    // 1.25rem
-        x_large: 28.0,  // 1.75rem
-        x2_large: 36.0, // 2.25rem
-        x3_large: 48.0, // 3rem
-        x4_large: 72.0, // 4.5rem
-    },
-
-    // Transition durations (in milliseconds)
-    transition: Transition {
-        x_slow: 1000,
-        slow: 500,
-        medium: 250,
-        fast: 150,
-        x_fast: 50,
-    },
-
-    // Font sizes (in pixels)
-    font_size: FontSize {
-        x2_small: 10.0, // 0.625rem
-        x_small: 12.0,  // 0.75rem
-        small: 14.0,    // 0.875rem
-        medium: 16.0,   // 1rem
-        large: 20.0,    // 1.25rem
-        x_large: 24.0,  // 1.5rem
-        x2_large: 36.0, // 2.25rem
-        x3_large: 48.0, // 3rem
-        x4_large: 72.0, // 4.5rem
-    },
-
-    // Font weights
-    font_weight: FontWeight {
-        light: 300,
-        normal: 400,
-        semibold: 500,
-        bold: 700,
-    },
-
-    // Line heights
-    line_height: LineHeight {
-        denser: 1.0,
-        dense: 1.4,
-        normal: 1.8,
-        loose: 2.2,
-        looser: 2.6,
-    },
-
-    // Input heights (in pixels)
-    input_height: InputHeight {
-        small: 30.0,  // 1.875rem
-        medium: 40.0, // 2.5rem
-        large: 50.0,  // 3.125rem
-    },
-
-    // Toggle sizes (in pixels)
-    toggle_size: ToggleSize {
-        small: 14.0,  // 0.875rem
-        medium: 18.0, // 1.125rem
-        large: 22.0,  // 1.375rem
-    },
-
-    // Z-index values
-    z_index: ZIndex {
-        drawer: 700,
-        dialog: 800,
-        dropdown: 900,
-        toast: 950,
-        tooltip: 1000,
-    },
 };
