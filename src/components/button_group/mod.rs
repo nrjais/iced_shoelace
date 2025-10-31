@@ -1,9 +1,10 @@
-use crate::Element;
 use crate::components::button::Button;
+use crate::{
+    Element,
+    theme::sizes::{BORDER_RADIUS, FONT_SIZE, SPACING},
+};
 use iced::widget::{Row, text};
 use iced_widget::Column;
-
-use crate::theme::Theme;
 
 /// Position of a button within a button group
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -77,10 +78,8 @@ impl<'a, Message> ButtonGroup<'a, Message> {
     where
         Message: Clone + 'a,
     {
-        let theme = Theme::default();
-        let tokens = theme.tokens();
         let button_count = self.buttons.len();
-        let border_radius = tokens.border_radius.medium;
+        let border_radius = BORDER_RADIUS.medium;
 
         // Create the button row with connected appearance
         let mut button_row = Row::new().spacing(self.spacing);
@@ -124,10 +123,10 @@ impl<'a, Message> ButtonGroup<'a, Message> {
 
         // If there's a label, add it above the button group
         if let Some(label_text) = self.label {
-            let label: Element<'a, Message> = text(label_text).size(tokens.font_size.small).into();
+            let label: Element<'a, Message> = text(label_text).size(FONT_SIZE.small).into();
 
             Column::new()
-                .spacing(tokens.spacing.x2_small)
+                .spacing(SPACING.x2_small)
                 .push(label)
                 .push(group_container)
                 .into()

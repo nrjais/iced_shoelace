@@ -624,6 +624,7 @@ impl ColorValue {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ColorVariant {
     Gray,
     Red,
@@ -675,6 +676,22 @@ impl ColorVariant {
         };
 
         value.get_color(&color_scale)
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct ColorToken {
+    variant: ColorVariant,
+    value: ColorValue,
+}
+
+impl ColorToken {
+    pub fn new(variant: ColorVariant, value: ColorValue) -> Self {
+        Self { variant, value }
+    }
+
+    pub fn get_color(self, color: Tokens) -> Color {
+        self.variant.get_color(color, self.value)
     }
 }
 

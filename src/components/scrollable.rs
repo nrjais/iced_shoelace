@@ -3,7 +3,10 @@ use iced::widget::{
     scrollable::{self, Scrollbar},
 };
 
-use crate::{components::Element, theme::Theme};
+use crate::{
+    components::Element,
+    theme::{Theme, sizes::SPACING},
+};
 
 pub enum Direction {
     Vertical,
@@ -21,7 +24,12 @@ pub fn scrollable_with<'a, Message>(
     base: impl Into<Element<'a, Message>>,
     direction: Direction,
 ) -> Scrollable<'a, Message, Theme> {
-    let scrollbar: Scrollbar = Scrollbar::default().spacing(0).width(10).scroller_width(10);
+    let scrollbar_width = SPACING.small; // 12.0
+
+    let scrollbar: Scrollbar = Scrollbar::default()
+        .spacing(0)
+        .width(scrollbar_width)
+        .scroller_width(scrollbar_width);
 
     let direction = match direction {
         Direction::Vertical => scrollable::Direction::Vertical(scrollbar),

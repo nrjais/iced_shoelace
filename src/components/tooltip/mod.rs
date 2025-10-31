@@ -1,10 +1,11 @@
-use crate::Element;
+use crate::{
+    Element,
+    theme::sizes::{FONT_SIZE, SPACING},
+};
 use iced::{
     Padding,
     widget::{container, text, tooltip as iced_tooltip},
 };
-
-use crate::theme::Theme;
 
 /// Tooltip placement options matching Shoelace design system
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -106,17 +107,12 @@ where
             // If disabled, just return the child
             tooltip.child
         } else {
-            let theme = Theme::default();
-            let tokens = theme.tokens();
-
             // Create tooltip with Shoelace styling
-            let tooltip_text = text(tooltip.content.clone()).size(tokens.font_size.small);
+            let tooltip_text = text(tooltip.content.clone()).size(FONT_SIZE.small);
 
             // Wrap in a container with padding
-            let tooltip_container = container(tooltip_text).padding(Padding::from([
-                tokens.spacing.x_small,
-                tokens.spacing.small,
-            ]));
+            let tooltip_container =
+                container(tooltip_text).padding(Padding::from([SPACING.x_small, SPACING.small]));
 
             // Use iced's built-in tooltip with the styled container
             iced_tooltip(tooltip.child, tooltip_container, tooltip.placement.into())

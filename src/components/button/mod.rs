@@ -1,12 +1,17 @@
-use crate::{Element, components::hovered};
+use crate::{
+    Element,
+    components::hovered,
+    theme::{
+        Theme,
+        sizes::{BORDER_RADIUS, FONT_SIZE, SPACING},
+    },
+};
 use iced::{
     Padding,
     border::Radius,
     widget::{self, Component, component, text},
 };
 use iced_widget::Row;
-
-use crate::theme::Theme;
 
 /// Button variant types matching Shoelace design system
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -145,35 +150,29 @@ impl<Message> Button<Message> {
     }
 
     /// Gets the appropriate padding based on size
-    fn get_padding(&self, theme: &Theme) -> Padding {
-        let tokens = theme.tokens();
-        let spacing = tokens.spacing;
-
+    fn get_padding(&self) -> Padding {
         // Following Shoelace spec: small (0.5rem, 1rem), medium (0.75rem, 1.5rem), large (1rem, 2rem)
         match self.size {
-            Size::Small => Padding::from([spacing.x_small, spacing.medium]), // 8px, 16px
-            Size::Medium => Padding::from([spacing.small, spacing.x_large]), // 12px, 28px (close to 24px)
-            Size::Large => Padding::from([spacing.medium, spacing.x2_large]), // 16px, 36px (close to 32px)
+            Size::Small => Padding::from([SPACING.x_small, SPACING.medium]), // 8px, 16px
+            Size::Medium => Padding::from([SPACING.small, SPACING.x_large]), // 12px, 28px (close to 24px)
+            Size::Large => Padding::from([SPACING.medium, SPACING.x2_large]), // 16px, 36px (close to 32px)
         }
     }
 
     /// Gets the appropriate border radius
-    fn get_border_radius(&self, theme: &Theme) -> Radius {
+    fn get_border_radius(&self) -> Radius {
         // Use custom border radius if set (for button groups)
         if let Some(custom_radius) = self.custom_border_radius {
             return custom_radius;
         }
 
-        let tokens = theme.tokens();
-        let border_radius = tokens.border_radius;
-
         let radius = if self.pill {
-            border_radius.x_large * 10.0
+            BORDER_RADIUS.x_large * 10.0
         } else {
             match self.size {
-                Size::Small => border_radius.small,
-                Size::Medium => border_radius.medium,
-                Size::Large => border_radius.large,
+                Size::Small => BORDER_RADIUS.small,
+                Size::Medium => BORDER_RADIUS.medium,
+                Size::Large => BORDER_RADIUS.large,
             }
         };
 
@@ -181,14 +180,11 @@ impl<Message> Button<Message> {
     }
 
     /// Gets the appropriate font size
-    fn get_font_size(&self, theme: &Theme) -> f32 {
-        let tokens = theme.tokens();
-        let font_size = tokens.font_size;
-
+    fn get_font_size(&self) -> f32 {
         match self.size {
-            Size::Small => font_size.small,
-            Size::Medium => font_size.medium,
-            Size::Large => font_size.large,
+            Size::Small => FONT_SIZE.small,
+            Size::Medium => FONT_SIZE.medium,
+            Size::Large => FONT_SIZE.large,
         }
     }
 }
@@ -218,10 +214,9 @@ where
     }
 
     fn view(&self, _state: &Self::State) -> Element<'a, Self::Event> {
-        let theme = Theme::default();
-        let padding = self.get_padding(&theme);
-        let border_radius = self.get_border_radius(&theme);
-        let font_size = self.get_font_size(&theme);
+        let padding = self.get_padding();
+        let border_radius = self.get_border_radius();
+        let font_size = self.get_font_size();
 
         // Build label text with optional caret
         let label_str = if self.loading {
@@ -250,7 +245,7 @@ where
             };
 
             // Build the button content with prefix, label, and suffix
-            let mut row_content = Row::new().spacing(theme.tokens().spacing.x2_small);
+            let mut row_content = Row::new().spacing(SPACING.x2_small);
 
             // Add prefix if present
             if let Some(prefix_text) = &prefix

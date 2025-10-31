@@ -1,9 +1,9 @@
 use iced_widget::text;
 
-use crate::theme::Theme;
+use crate::theme::{Theme, pallete::ColorToken};
 
 pub struct TextStyleClass {
-    color: Option<iced::Color>,
+    color: Option<ColorToken>,
 }
 
 impl text::Catalog for Theme {
@@ -14,6 +14,7 @@ impl text::Catalog for Theme {
     }
 
     fn style(&self, class: &Self::Class<'_>) -> text::Style {
-        text::Style { color: class.color }
+        let color = class.color.map(|color| color.get_color(self.tokens()));
+        text::Style { color }
     }
 }
