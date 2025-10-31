@@ -54,7 +54,7 @@ impl Gallery {
     }
 
     fn theme(&self) -> Theme {
-        self.theme.clone()
+        self.theme
     }
 
     fn title(&self) -> String {

@@ -4,6 +4,7 @@ use iced_widget::{Row, column, text};
 use crate::components::button::{Button, Size, Variant};
 use crate::components::button_group::button_group_with;
 use crate::components::scrollable;
+use crate::components::{TooltipPlacement, tooltip};
 use crate::theme::{ScrollableClass, Theme};
 use crate::{Element, Message};
 
@@ -312,6 +313,55 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let scrollable_row =
         Row::with_children([default_scrollable.into(), subtle_scrollable.into()]).spacing(20);
 
+    // Tooltips section
+    let tooltips_title = text("Tooltips").size(24);
+    let tooltips_desc = text("Hover over the elements to see tooltips").size(14);
+
+    let tooltip_button_top = tooltip(
+        "This is a tooltip on top!",
+        Button::new("Hover me (Top)")
+            .variant(Variant::Primary)
+            .on_press(Message::ButtonPressed("Tooltip Top".into())),
+    )
+    .placement(TooltipPlacement::Top);
+
+    let tooltip_button_bottom = tooltip(
+        "This is a tooltip on bottom",
+        Button::new("Hover me (Bottom)")
+            .variant(Variant::Success)
+            .on_press(Message::ButtonPressed("Tooltip Bottom".into())),
+    )
+    .placement(TooltipPlacement::Bottom);
+
+    let tooltip_button_left = tooltip(
+        "This tooltip appears on the left",
+        Button::new("Hover me (Left)")
+            .variant(Variant::Warning)
+            .on_press(Message::ButtonPressed("Tooltip Left".into())),
+    )
+    .placement(TooltipPlacement::Left);
+
+    let tooltip_button_right = tooltip(
+        "This tooltip appears on the right",
+        Button::new("Hover me (Right)")
+            .variant(Variant::Danger)
+            .on_press(Message::ButtonPressed("Tooltip Right".into())),
+    )
+    .placement(TooltipPlacement::Right);
+
+    let tooltip_text = tooltip(
+        "Even text can have tooltips!",
+        text("Hover over this text").size(16),
+    );
+
+    let tooltips_row = Row::with_children([
+        tooltip_button_top.into(),
+        tooltip_button_bottom.into(),
+        tooltip_button_left.into(),
+        tooltip_button_right.into(),
+    ])
+    .spacing(10);
+
     // Click counter
     let counter = text(format!("Total button clicks: {}", button_count)).size(18);
 
@@ -341,6 +391,10 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
         scrollable_title,
         scrollable_desc,
         scrollable_row,
+        tooltips_title,
+        tooltips_desc,
+        tooltips_row,
+        tooltip_text,
         counter,
     ]
     .spacing(20)

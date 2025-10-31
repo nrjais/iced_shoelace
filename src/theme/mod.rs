@@ -2,10 +2,12 @@ use iced::theme;
 
 use crate::theme::tokens::Tokens;
 
+pub mod button;
+pub mod container;
 pub mod pallete;
 pub mod scrollable;
+pub mod text;
 pub mod tokens;
-pub mod button;
 
 pub use scrollable::ScrollableClass;
 

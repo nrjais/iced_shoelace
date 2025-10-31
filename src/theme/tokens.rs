@@ -154,4 +154,3 @@ pub struct Tokens {
     pub toggle_size: ToggleSize,
     pub z_index: ZIndex,
 }
-

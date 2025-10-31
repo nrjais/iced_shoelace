@@ -1,4 +1,4 @@
-use iced_widget::{button, container, text};
+use iced_widget::button;
 
 use crate::{
     components::button::{ButtonStyleClass, Variant},
@@ -38,9 +38,7 @@ impl button::Catalog for Theme {
 
         let (background, text_color, border_color, shadow_color) = if is_disabled {
             // Disabled state - desaturated colors
-            let (bg, border) = if class.variant == Variant::Text {
-                (iced::Color::TRANSPARENT, color_scale.c100)
-            } else if class.outline {
+            let (bg, border) = if class.variant == Variant::Text || class.outline {
                 (iced::Color::TRANSPARENT, color_scale.c100)
             } else {
                 (color_scale.c100, iced::Color::TRANSPARENT)
@@ -86,9 +84,7 @@ impl button::Catalog for Theme {
             )
         } else if class.variant == Variant::Default {
             // Default variant - white/light background with border and dark text
-            let bg = if is_pressed {
-                tokens.neutral.c50
-            } else if is_hovered {
+            let bg = if is_pressed || is_hovered {
                 tokens.neutral.c50
             } else {
                 tokens.neutral_0
@@ -143,40 +139,6 @@ impl button::Catalog for Theme {
                 radius: class.border_radius,
             },
             shadow,
-            snap: false,
-        }
-    }
-}
-
-// Implement text Catalog trait
-impl text::Catalog for Theme {
-    type Class<'a> = ();
-
-    fn default<'a>() -> Self::Class<'a> {
-        ()
-    }
-
-    fn style(&self, _class: &Self::Class<'_>) -> text::Style {
-        text::Style {
-            color: Some(self.tokens().gray.c900),
-        }
-    }
-}
-
-// Implement container Catalog trait
-impl container::Catalog for Theme {
-    type Class<'a> = ();
-
-    fn default<'a>() -> Self::Class<'a> {
-        ()
-    }
-
-    fn style(&self, _class: &Self::Class<'_>) -> container::Style {
-        container::Style {
-            background: Some(iced::Background::Color(self.tokens().neutral_0)),
-            text_color: Some(self.tokens().gray.c900),
-            border: iced::Border::default(),
-            shadow: iced::Shadow::default(),
             snap: false,
         }
     }

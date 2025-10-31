@@ -60,7 +60,7 @@ impl<'a, Message: 'a + Clone> From<Hovered<'a, Message>> for Element<'a, Message
     }
 }
 
-pub fn hovered<'a, Message: 'a + Clone, F, I>(f: F) -> Element<'a, Message>
+pub fn hovered<'a, Message, F, I>(f: F) -> Element<'a, Message>
 where
     Message: Clone + 'a,
     F: Fn(bool) -> I + 'a,

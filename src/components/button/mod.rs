@@ -253,20 +253,20 @@ where
             let mut row_content = Row::new().spacing(theme.tokens().spacing.x2_small);
 
             // Add prefix if present
-            if let Some(prefix_text) = &prefix {
-                if !prefix_text.is_empty() {
-                    row_content = row_content.push(text(prefix_text.clone()).size(font_size));
-                }
+            if let Some(prefix_text) = &prefix
+                && !prefix_text.is_empty()
+            {
+                row_content = row_content.push(text(prefix_text.clone()).size(font_size));
             }
 
             // Add main label
             row_content = row_content.push(text(label_str.clone()).size(font_size));
 
             // Add suffix if present
-            if let Some(suffix_text) = &suffix {
-                if !suffix_text.is_empty() {
-                    row_content = row_content.push(text(suffix_text.clone()).size(font_size));
-                }
+            if let Some(suffix_text) = &suffix
+                && !suffix_text.is_empty()
+            {
+                row_content = row_content.push(text(suffix_text.clone()).size(font_size));
             }
 
             let button_content: Element<'a, Event> = row_content.into();
@@ -295,40 +295,5 @@ where
 {
     fn from(button: Button<Message>) -> Self {
         component(button)
-    }
-}
-
-// Convenience constructors for common button types
-pub mod button {
-    use crate::components::button::{Button, Variant};
-
-    /// Creates a new primary button
-    pub fn primary<Message>(label: impl Into<String>) -> Button<Message> {
-        Button::new(label).variant(Variant::Primary)
-    }
-
-    /// Creates a new success button
-    pub fn success<Message>(label: impl Into<String>) -> Button<Message> {
-        Button::new(label).variant(Variant::Success)
-    }
-
-    /// Creates a new danger button
-    pub fn danger<Message>(label: impl Into<String>) -> Button<Message> {
-        Button::new(label).variant(Variant::Danger)
-    }
-
-    /// Creates a new warning button
-    pub fn warning<Message>(label: impl Into<String>) -> Button<Message> {
-        Button::new(label).variant(Variant::Warning)
-    }
-
-    /// Creates a new neutral button
-    pub fn neutral<Message>(label: impl Into<String>) -> Button<Message> {
-        Button::new(label).variant(Variant::Neutral)
-    }
-
-    /// Creates a new text button
-    pub fn text_button<Message>(label: impl Into<String>) -> Button<Message> {
-        Button::new(label).variant(Variant::Text)
     }
 }
