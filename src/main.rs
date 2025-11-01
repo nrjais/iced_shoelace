@@ -23,6 +23,7 @@ fn main() -> iced::Result {
 pub enum Page {
     Overview,
     Badges,
+    Breadcrumbs,
     Buttons,
     ButtonGroups,
     Scrollables,
@@ -40,6 +41,7 @@ impl Page {
         vec![
             Self::Overview,
             Self::Badges,
+            Self::Breadcrumbs,
             Self::Buttons,
             Self::ButtonGroups,
             Self::Scrollables,
@@ -51,6 +53,7 @@ impl Page {
         match self {
             Self::Overview => "Overview",
             Self::Badges => "Badges",
+            Self::Breadcrumbs => "Breadcrumbs",
             Self::Buttons => "Buttons",
             Self::ButtonGroups => "Button Groups",
             Self::Scrollables => "Scrollables",

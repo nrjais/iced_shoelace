@@ -200,6 +200,7 @@ where
             let mut tooltip_widget =
                 widgets::tooltip::Tooltip::new(t.child, tooltip_container, t.placement.into())
                     .gap(t.distance)
+                    .class(ContainerStyleClass::Tooltip)
                     .duration(t.duration);
 
             // When hoist is true, we don't snap to viewport to allow overflow
