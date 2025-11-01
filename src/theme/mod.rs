@@ -4,6 +4,7 @@ use crate::theme::tokens::Tokens;
 
 pub mod badge;
 pub mod button;
+pub mod checkbox;
 pub mod container;
 pub mod pallete;
 pub mod scrollable;

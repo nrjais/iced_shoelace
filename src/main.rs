@@ -26,6 +26,8 @@ pub enum Page {
     Breadcrumbs,
     Buttons,
     ButtonGroups,
+    Cards,
+    Checkboxes,
     Scrollables,
     Tooltips,
 }
@@ -44,6 +46,8 @@ impl Page {
             Self::Breadcrumbs,
             Self::Buttons,
             Self::ButtonGroups,
+            Self::Cards,
+            Self::Checkboxes,
             Self::Scrollables,
             Self::Tooltips,
         ]
@@ -56,6 +60,8 @@ impl Page {
             Self::Breadcrumbs => "Breadcrumbs",
             Self::Buttons => "Buttons",
             Self::ButtonGroups => "Button Groups",
+            Self::Cards => "Cards",
+            Self::Checkboxes => "Checkboxes",
             Self::Scrollables => "Scrollables",
             Self::Tooltips => "Tooltips",
         }
@@ -71,6 +77,7 @@ struct Gallery {
 #[derive(Debug, Clone)]
 pub enum Message {
     ButtonPressed(String),
+    CheckboxChanged(String, bool),
     SwitchTheme(Theme),
     NavigateToPage(Page),
 }
@@ -82,6 +89,11 @@ impl Gallery {
             Message::ButtonPressed(label) => {
                 let mut stdout = std::io::stdout();
                 writeln!(stdout, "Button '{}' pressed!", label).ok();
+                Task::none()
+            }
+            Message::CheckboxChanged(label, checked) => {
+                let mut stdout = std::io::stdout();
+                writeln!(stdout, "Checkbox '{}' changed to: {}", label, checked).ok();
                 Task::none()
             }
             Message::SwitchTheme(theme) => {

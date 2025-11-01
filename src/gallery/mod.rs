@@ -3,15 +3,17 @@ use iced_widget::{Row, column, container, text};
 
 use crate::components::button::Button;
 use crate::components::scrollable;
-use crate::theme::button::{ButtonSize, ButtonVariant};
 use crate::theme::Theme;
+use crate::theme::button::{ButtonSize, ButtonVariant};
 use crate::{Element, Message, Page};
 
-mod overview;
 mod badges;
 mod breadcrumbs;
-mod buttons;
 mod button_groups;
+mod buttons;
+mod cards;
+mod checkboxes;
+mod overview;
 mod scrollables;
 mod tooltips;
 
@@ -76,6 +78,8 @@ fn page_content(page: Page) -> Element<'static, Message> {
         Page::Breadcrumbs => breadcrumbs::page(),
         Page::Buttons => buttons::page(),
         Page::ButtonGroups => button_groups::page(),
+        Page::Cards => cards::page(),
+        Page::Checkboxes => checkboxes::page(),
         Page::Scrollables => scrollables::page(),
         Page::Tooltips => tooltips::page(),
     };
