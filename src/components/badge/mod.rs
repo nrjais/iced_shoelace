@@ -58,7 +58,7 @@ impl Badge {
     /// Following Shoelace spec: small padding for compact appearance
     fn get_padding(&self) -> Padding {
         // Badges in Shoelace use: 0 0.5rem (0px 8px)
-        Padding::from([0.0, SPACING.medium])
+        Padding::from([SPACING.x2_small, SPACING.small])
     }
 
     /// Gets the appropriate border radius
