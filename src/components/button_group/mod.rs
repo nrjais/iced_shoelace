@@ -1,9 +1,14 @@
 use crate::components::button::Button;
 use crate::{
     Element,
-    theme::sizes::{BORDER_RADIUS, FONT_SIZE, SPACING},
+    theme::{
+        container::ContainerStyleClass,
+        pallete::{ColorToken, ColorValue, ColorVariant},
+        sizes::{BORDER_RADIUS, FONT_SIZE, LINE_HEIGHT, SPACING},
+        text::TextStyleClass,
+    },
 };
-use iced::widget::{Row, text};
+use iced::widget::{Row, container, text};
 use iced_widget::Column;
 
 /// Position of a button within a button group
@@ -118,18 +123,34 @@ impl<'a, Message> ButtonGroup<'a, Message> {
             button_row = button_row.push(styled_button);
         }
 
-        // Wrap in a container-like row
-        let group_container: Element<'a, Message> = button_row.into();
+        // Wrap buttons in a container with Shoelace-style inline-flex behavior
+        // This matches Shoelace's button-group base part styling
+        let group_container: Element<'a, Message> = container(button_row)
+            .class(ContainerStyleClass::ButtonGroup)
+            .into();
 
         // If there's a label, add it above the button group
         if let Some(label_text) = self.label {
-            let label: Element<'a, Message> = text(label_text).size(FONT_SIZE.small).into();
+            // Create styled label text with proper Shoelace typography
+            let label_style = TextStyleClass {
+                color: Some(ColorToken::new(ColorVariant::NeutralBase, ColorValue::C900)),
+            };
 
-            Column::new()
-                .spacing(SPACING.x2_small)
-                .push(label)
-                .push(group_container)
-                .into()
+            let label: Element<'a, Message> = text(label_text)
+                .size(FONT_SIZE.small)
+                .line_height(LINE_HEIGHT.normal)
+                .class(label_style)
+                .into();
+
+            // Wrap label and group in a column with proper spacing
+            container(
+                Column::new()
+                    .spacing(SPACING.x2_small)
+                    .push(label)
+                    .push(group_container),
+            )
+            .class(ContainerStyleClass::ButtonGroup)
+            .into()
         } else {
             group_container
         }

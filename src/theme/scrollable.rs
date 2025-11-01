@@ -58,7 +58,7 @@ impl scrollable::Catalog for Theme {
                     iced::Border {
                         color: iced::Color::TRANSPARENT,
                         width,
-                        radius: BORDER_RADIUS.large.into(),
+                        radius: BORDER_RADIUS.x_large.into(),
                     },
                 )
             }
@@ -78,7 +78,7 @@ impl scrollable::Catalog for Theme {
                     iced::Border {
                         color: iced::Color::TRANSPARENT,
                         width,
-                        radius: BORDER_RADIUS.large.into(),
+                        radius: BORDER_RADIUS.x_large.into(),
                     },
                 )
             }
@@ -93,7 +93,7 @@ impl scrollable::Catalog for Theme {
                 border: iced::Border {
                     color: iced::Color::TRANSPARENT,
                     width,
-                    radius: BORDER_RADIUS.large.into(),
+                    radius: BORDER_RADIUS.x_large.into(),
                 },
                 scroller: scrollable::Scroller {
                     color: scroller_color,
@@ -105,7 +105,7 @@ impl scrollable::Catalog for Theme {
                 border: iced::Border {
                     color: iced::Color::TRANSPARENT,
                     width,
-                    radius: BORDER_RADIUS.large.into(),
+                    radius: BORDER_RADIUS.x_large.into(),
                 },
                 scroller: scrollable::Scroller {
                     color: scroller_color,

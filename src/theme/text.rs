@@ -3,7 +3,7 @@ use iced_widget::text;
 use crate::theme::{Theme, pallete::ColorToken};
 
 pub struct TextStyleClass {
-    color: Option<ColorToken>,
+    pub color: Option<ColorToken>,
 }
 
 impl text::Catalog for Theme {

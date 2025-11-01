@@ -354,11 +354,21 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
         text("Hover over this text").size(16),
     );
 
+    let tooltip_custom_distance = tooltip(
+        "This tooltip is further away (distance: 20px)",
+        Button::new("Custom Distance")
+            .variant(Variant::Neutral)
+            .on_press(Message::ButtonPressed("Custom Distance".into())),
+    )
+    .placement(TooltipPlacement::Top)
+    .distance(20.0);
+
     let tooltips_row = Row::with_children([
         tooltip_button_top.into(),
         tooltip_button_bottom.into(),
         tooltip_button_left.into(),
         tooltip_button_right.into(),
+        tooltip_custom_distance.into(),
     ])
     .spacing(10);
 
