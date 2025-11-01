@@ -1,13 +1,14 @@
 use crate::{
     Element,
     theme::{
+        container::ContainerStyleClass,
         pallete::{ColorToken, ColorValue, ColorVariant},
         sizes::{FONT_SIZE, LINE_HEIGHT, SPACING},
         text::TextStyleClass,
     },
 };
 use iced::{
-    Alignment, Font, Padding,
+    Alignment, Font, Padding, Shadow,
     widget::{container, text},
 };
 use iced_core::Length;
@@ -115,13 +116,24 @@ impl<'a, Message: 'a> From<MenuLabel> for Element<'a, Message> {
                 color: Some(ColorToken::new(ColorVariant::Neutral, ColorValue::C600)),
             });
 
-        // Build the container with appropriate styling
+        // Build the container with transparent background (no background color in Shoelace)
+        let transparent_style = ContainerStyleClass::Custom {
+            background: None,
+            text_color: None,
+            border_color: None,
+            border_width: 0.0,
+            border_radius: 0.0,
+            shadow: Shadow::default(),
+            snap: false,
+        };
+
         container(label_text)
             .padding(padding)
             .align_x(Alignment::Start)
             .align_y(Alignment::Center)
             .width(Length::Fill)
             .height(Length::Shrink)
+            .class(transparent_style)
             .into()
     }
 }

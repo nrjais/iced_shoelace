@@ -1,9 +1,9 @@
 use crate::{
     Element,
-    theme::{rule::RuleStyleClass, sizes::SPACING},
+    theme::{container::ContainerStyleClass, rule::RuleStyleClass, sizes::SPACING},
 };
 use iced::{
-    Color, Length, Padding,
+    Color, Length, Padding, Shadow,
     widget::{container, rule},
 };
 
@@ -134,11 +134,21 @@ impl<'a, Message: 'a> From<Divider> for Element<'a, Message> {
             rule_widget.class(RuleStyleClass::Default)
         };
 
-        // Wrap in a container to add spacing
+        // Wrap in a container to add spacing with transparent background (matching Shoelace)
         let padding = if divider.vertical {
             Padding::from([0.0, divider.spacing])
         } else {
             Padding::from([divider.spacing, 0.0])
+        };
+
+        let transparent_style = ContainerStyleClass::Custom {
+            background: None,
+            text_color: None,
+            border_color: None,
+            border_width: 0.0,
+            border_radius: 0.0,
+            shadow: Shadow::default(),
+            snap: false,
         };
 
         container(styled_rule)
@@ -153,6 +163,7 @@ impl<'a, Message: 'a> From<Divider> for Element<'a, Message> {
             } else {
                 Length::Shrink
             })
+            .class(transparent_style)
             .into()
     }
 }
