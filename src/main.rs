@@ -32,6 +32,7 @@ pub enum Page {
     Checkboxes,
     Dialogs,
     Dividers,
+    MenuItems,
     MenuLabels,
     Scrollables,
     Tooltips,
@@ -50,6 +51,7 @@ impl Page {
             Self::Checkboxes,
             Self::Dialogs,
             Self::Dividers,
+            Self::MenuItems,
             Self::MenuLabels,
             Self::Scrollables,
             Self::Tooltips,
@@ -67,6 +69,7 @@ impl Page {
             Self::Checkboxes => "Checkboxes",
             Self::Dialogs => "Dialogs",
             Self::Dividers => "Dividers",
+            Self::MenuItems => "Menu Items",
             Self::MenuLabels => "Menu Labels",
             Self::Scrollables => "Scrollables",
             Self::Tooltips => "Tooltips",
@@ -85,6 +88,7 @@ struct Gallery {
 pub enum Message {
     ButtonPressed(String),
     CheckboxChanged(String, bool),
+    MenuItemSelected,
     SwitchTheme(Theme),
     NavigateToPage(Page),
     Dialog(gallery::DialogMessage),
@@ -102,6 +106,11 @@ impl Gallery {
             Message::CheckboxChanged(label, checked) => {
                 let mut stdout = std::io::stdout();
                 writeln!(stdout, "Checkbox '{}' changed to: {}", label, checked).ok();
+                Task::none()
+            }
+            Message::MenuItemSelected => {
+                let mut stdout = std::io::stdout();
+                writeln!(stdout, "Menu item selected").ok();
                 Task::none()
             }
             Message::SwitchTheme(theme) => {
