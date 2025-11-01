@@ -11,6 +11,7 @@ pub mod hovered;
 pub mod menu;
 pub mod menu_item;
 pub mod menu_label;
+pub mod popup;
 pub mod scrollable;
 pub mod tooltip;
 
@@ -28,5 +29,6 @@ pub use hovered::{Hovered, hovered};
 pub use menu::{Menu, menu, menu_with};
 pub use menu_item::{MenuItem, MenuItemType, menu_item};
 pub use menu_label::{MenuLabel, menu_label};
+pub use popup::{Placement as PopupPlacement, Popup, popup};
 pub use scrollable::{Direction, scrollable, scrollable_with};
 pub use tooltip::{Placement as TooltipPlacement, Tooltip, tooltip};

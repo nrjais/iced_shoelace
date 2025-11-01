@@ -35,6 +35,7 @@ pub enum Page {
     MenuItems,
     MenuLabels,
     Menus,
+    Popups,
     Scrollables,
     Tooltips,
 }
@@ -55,6 +56,7 @@ impl Page {
             Self::MenuItems,
             Self::MenuLabels,
             Self::Menus,
+            Self::Popups,
             Self::Scrollables,
             Self::Tooltips,
         ]
@@ -74,6 +76,7 @@ impl Page {
             Self::MenuItems => "Menu Items",
             Self::MenuLabels => "Menu Labels",
             Self::Menus => "Menus",
+            Self::Popups => "Popups",
             Self::Scrollables => "Scrollables",
             Self::Tooltips => "Tooltips",
         }
