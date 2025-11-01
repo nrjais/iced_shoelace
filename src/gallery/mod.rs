@@ -1,10 +1,11 @@
 use iced::{Length, alignment};
 use iced_widget::{Row, column, text};
 
-use crate::components::button::{Button, Size, Variant};
+use crate::components::button::Button;
 use crate::components::button_group::button_group_with;
 use crate::components::scrollable;
 use crate::components::{TooltipPlacement, tooltip};
+use crate::theme::button::{ButtonSize, ButtonVariant};
 use crate::theme::{ScrollableClass, Theme};
 use crate::{Element, Message};
 
@@ -19,27 +20,27 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let variants_title = text("Variants").size(24);
     let variants_row = Row::with_children([
         Button::new("Default")
-            .variant(Variant::Default)
+            .variant(ButtonVariant::Default)
             .on_press(Message::ButtonPressed("Default".into()))
             .into(),
         Button::new("Primary")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .on_press(Message::ButtonPressed("Primary".into()))
             .into(),
         Button::new("Success")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .on_press(Message::ButtonPressed("Success".into()))
             .into(),
         Button::new("Neutral")
-            .variant(Variant::Neutral)
+            .variant(ButtonVariant::Neutral)
             .on_press(Message::ButtonPressed("Neutral".into()))
             .into(),
         Button::new("Warning")
-            .variant(Variant::Warning)
+            .variant(ButtonVariant::Warning)
             .on_press(Message::ButtonPressed("Warning".into()))
             .into(),
         Button::new("Danger")
-            .variant(Variant::Danger)
+            .variant(ButtonVariant::Danger)
             .on_press(Message::ButtonPressed("Danger".into()))
             .into(),
     ])
@@ -49,18 +50,18 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let sizes_title = text("Sizes").size(24);
     let sizes_row = Row::with_children([
         Button::new("Small")
-            .variant(Variant::Primary)
-            .size(Size::Small)
+            .variant(ButtonVariant::Primary)
+            .size(ButtonSize::Small)
             .on_press(Message::ButtonPressed("Small".into()))
             .into(),
         Button::new("Medium")
-            .variant(Variant::Primary)
-            .size(Size::Medium)
+            .variant(ButtonVariant::Primary)
+            .size(ButtonSize::Medium)
             .on_press(Message::ButtonPressed("Medium".into()))
             .into(),
         Button::new("Large")
-            .variant(Variant::Primary)
-            .size(Size::Large)
+            .variant(ButtonVariant::Primary)
+            .size(ButtonSize::Large)
             .on_press(Message::ButtonPressed("Large".into()))
             .into(),
     ])
@@ -71,22 +72,22 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let outline_title = text("Outline").size(24);
     let outline_row = Row::with_children([
         Button::new("Default")
-            .variant(Variant::Default)
+            .variant(ButtonVariant::Default)
             .outline(true)
             .on_press(Message::ButtonPressed("Outline Default".into()))
             .into(),
         Button::new("Primary")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .outline(true)
             .on_press(Message::ButtonPressed("Outline Primary".into()))
             .into(),
         Button::new("Success")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .outline(true)
             .on_press(Message::ButtonPressed("Outline Success".into()))
             .into(),
         Button::new("Danger")
-            .variant(Variant::Danger)
+            .variant(ButtonVariant::Danger)
             .outline(true)
             .on_press(Message::ButtonPressed("Outline Danger".into()))
             .into(),
@@ -97,17 +98,17 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let pill_title = text("Pill").size(24);
     let pill_row = Row::with_children([
         Button::new("Default")
-            .variant(Variant::Default)
+            .variant(ButtonVariant::Default)
             .pill(true)
             .on_press(Message::ButtonPressed("Pill Default".into()))
             .into(),
         Button::new("Primary")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .pill(true)
             .on_press(Message::ButtonPressed("Pill Primary".into()))
             .into(),
         Button::new("Success")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .pill(true)
             .on_press(Message::ButtonPressed("Pill Success".into()))
             .into(),
@@ -118,11 +119,11 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let text_title = text("Text Buttons").size(24);
     let text_row = Row::with_children([
         Button::new("Text Default")
-            .variant(Variant::Text)
+            .variant(ButtonVariant::Text)
             .on_press(Message::ButtonPressed("Text Default".into()))
             .into(),
         Button::new("Text Primary")
-            .variant(Variant::Text)
+            .variant(ButtonVariant::Text)
             .on_press(Message::ButtonPressed("Text Primary".into()))
             .into(),
     ])
@@ -132,12 +133,12 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let states_title = text("States").size(24);
     let states_row = Row::with_children([
         Button::new("Loading")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .loading(true)
             .on_press(Message::ButtonPressed("Loading".into()))
             .into(),
         Button::new("Disabled")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .disabled(true)
             .on_press(Message::ButtonPressed("Disabled".into()))
             .into(),
@@ -148,17 +149,17 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let prefix_suffix_title = text("Prefix & Suffix").size(24);
     let prefix_suffix_row = Row::with_children([
         Button::new("Settings")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .prefix("⚙")
             .on_press(Message::ButtonPressed("Settings".into()))
             .into(),
         Button::new("Download")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .suffix("↓")
             .on_press(Message::ButtonPressed("Download".into()))
             .into(),
         Button::new("Delete")
-            .variant(Variant::Danger)
+            .variant(ButtonVariant::Danger)
             .prefix("🗑")
             .suffix("×")
             .on_press(Message::ButtonPressed("Delete".into()))
@@ -173,26 +174,26 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     // Basic button group
     let basic_group = button_group_with(vec![
         Button::new("Left")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .on_press(Message::ButtonPressed("Group Left".into())),
         Button::new("Middle")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .on_press(Message::ButtonPressed("Group Middle".into())),
         Button::new("Right")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .on_press(Message::ButtonPressed("Group Right".into())),
     ]);
 
     // Button group with label
     let labeled_group = button_group_with(vec![
         Button::new("Bold")
-            .variant(Variant::Neutral)
+            .variant(ButtonVariant::Neutral)
             .on_press(Message::ButtonPressed("Bold".into())),
         Button::new("Italic")
-            .variant(Variant::Neutral)
+            .variant(ButtonVariant::Neutral)
             .on_press(Message::ButtonPressed("Italic".into())),
         Button::new("Underline")
-            .variant(Variant::Neutral)
+            .variant(ButtonVariant::Neutral)
             .on_press(Message::ButtonPressed("Underline".into())),
     ])
     .label("Text Formatting");
@@ -200,13 +201,13 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     // Button group with different variants
     let action_group = button_group_with(vec![
         Button::new("View")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .on_press(Message::ButtonPressed("View".into())),
         Button::new("Edit")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .on_press(Message::ButtonPressed("Edit".into())),
         Button::new("Delete")
-            .variant(Variant::Danger)
+            .variant(ButtonVariant::Danger)
             .on_press(Message::ButtonPressed("Delete Group".into())),
     ])
     .label("Actions");
@@ -214,15 +215,15 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     // Button group with outline buttons
     let outline_group = button_group_with(vec![
         Button::new("One")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .outline(true)
             .on_press(Message::ButtonPressed("One".into())),
         Button::new("Two")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .outline(true)
             .on_press(Message::ButtonPressed("Two".into())),
         Button::new("Three")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .outline(true)
             .on_press(Message::ButtonPressed("Three".into())),
     ]);
@@ -237,24 +238,24 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let disabled_title = text("Disabled Variants").size(24);
     let disabled_row = Row::with_children([
         Button::new("Primary")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .disabled(true)
             .into(),
         Button::new("Success")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .disabled(true)
             .into(),
         Button::new("Danger")
-            .variant(Variant::Danger)
+            .variant(ButtonVariant::Danger)
             .disabled(true)
             .into(),
         Button::new("Outline")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .outline(true)
             .disabled(true)
             .into(),
         Button::new("Text")
-            .variant(Variant::Text)
+            .variant(ButtonVariant::Text)
             .disabled(true)
             .into(),
     ])
@@ -320,7 +321,7 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let tooltip_button_top = tooltip(
         "This is a tooltip on top!",
         Button::new("Hover me (Top)")
-            .variant(Variant::Primary)
+            .variant(ButtonVariant::Primary)
             .on_press(Message::ButtonPressed("Tooltip Top".into())),
     )
     .placement(TooltipPlacement::Top);
@@ -328,7 +329,7 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let tooltip_button_bottom = tooltip(
         "This is a tooltip on bottom",
         Button::new("Hover me (Bottom)")
-            .variant(Variant::Success)
+            .variant(ButtonVariant::Success)
             .on_press(Message::ButtonPressed("Tooltip Bottom".into())),
     )
     .placement(TooltipPlacement::Bottom);
@@ -336,7 +337,7 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let tooltip_button_left = tooltip(
         "This tooltip appears on the left",
         Button::new("Hover me (Left)")
-            .variant(Variant::Warning)
+            .variant(ButtonVariant::Warning)
             .on_press(Message::ButtonPressed("Tooltip Left".into())),
     )
     .placement(TooltipPlacement::Left);
@@ -344,7 +345,7 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let tooltip_button_right = tooltip(
         "This tooltip appears on the right",
         Button::new("Hover me (Right)")
-            .variant(Variant::Danger)
+            .variant(ButtonVariant::Danger)
             .on_press(Message::ButtonPressed("Tooltip Right".into())),
     )
     .placement(TooltipPlacement::Right);
@@ -357,7 +358,7 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let tooltip_custom_distance = tooltip(
         "This tooltip is further away (distance: 20px)",
         Button::new("Custom Distance")
-            .variant(Variant::Neutral)
+            .variant(ButtonVariant::Neutral)
             .on_press(Message::ButtonPressed("Custom Distance".into())),
     )
     .placement(TooltipPlacement::Top)

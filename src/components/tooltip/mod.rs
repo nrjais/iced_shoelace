@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::widgets;
 use crate::{
     Element,
@@ -24,17 +26,9 @@ use iced::{
 pub enum Placement {
     #[default]
     Top,
-    TopStart,
-    TopEnd,
     Right,
-    RightStart,
-    RightEnd,
     Bottom,
-    BottomStart,
-    BottomEnd,
     Left,
-    LeftStart,
-    LeftEnd,
 }
 
 /// Trigger options for showing the tooltip
@@ -50,10 +44,10 @@ pub enum Trigger {
 impl From<Placement> for Position {
     fn from(placement: Placement) -> Self {
         match placement {
-            Placement::Top | Placement::TopStart | Placement::TopEnd => Position::Top,
-            Placement::Bottom | Placement::BottomStart | Placement::BottomEnd => Position::Bottom,
-            Placement::Left | Placement::LeftStart | Placement::LeftEnd => Position::Left,
-            Placement::Right | Placement::RightStart | Placement::RightEnd => Position::Right,
+            Placement::Top => Position::Top,
+            Placement::Bottom => Position::Bottom,
+            Placement::Left => Position::Left,
+            Placement::Right => Position::Right,
         }
     }
 }
@@ -64,6 +58,7 @@ impl From<Placement> for Position {
 /// - Multiple placements (top, right, bottom, left with start/end variations)
 /// - Configurable distance from target
 /// - Configurable skidding (offset along the target)
+/// - Configurable hover delay/duration
 /// - Disabled state
 /// - Hoist option to prevent clipping
 /// - Uses iced's built-in overlay system for proper positioning
@@ -83,7 +78,7 @@ impl From<Placement> for Position {
 /// use iced_shoelace::components::tooltip::{tooltip, Placement};
 /// use iced_shoelace::components::button::Button;
 ///
-/// // Basic tooltip
+/// // Basic tooltip (shows immediately on hover)
 /// let my_tooltip = tooltip(
 ///     "This is a helpful tooltip!",
 ///     Button::new("Hover me")
@@ -96,6 +91,13 @@ impl From<Placement> for Position {
 /// )
 /// .placement(Placement::Bottom)
 /// .distance(16.0);
+///
+/// // Tooltip with hover delay
+/// let delayed_tooltip = tooltip(
+///     "This appears after 300ms",
+///     Button::new("Hover me")
+/// )
+/// .duration(std::time::Duration::from_millis(300));
 ///
 /// // Disabled tooltip
 /// let disabled_tooltip = tooltip(
@@ -119,6 +121,7 @@ pub struct Tooltip<'a, Message> {
     skidding: f32,
     disabled: bool,
     hoist: bool,
+    duration: Duration,
 }
 
 impl<'a, Message> Tooltip<'a, Message> {
@@ -128,10 +131,11 @@ impl<'a, Message> Tooltip<'a, Message> {
             content: content.into(),
             child: child.into(),
             placement: Placement::Top,
-            distance: 4.0,
+            distance: 8.0,
             skidding: 0.0,
             disabled: false,
             hoist: false,
+            duration: Duration::from_millis(500),
         }
     }
 
@@ -167,6 +171,14 @@ impl<'a, Message> Tooltip<'a, Message> {
         self.hoist = hoist;
         self
     }
+
+    /// Sets the duration before the tooltip appears on hover
+    /// Default: 0ms (shows immediately)
+    /// Shoelace default: 0ms for show, 0ms for hide
+    pub fn duration(mut self, duration: Duration) -> Self {
+        self.duration = duration;
+        self
+    }
 }
 
 impl<'a, Message> From<Tooltip<'a, Message>> for Element<'a, Message>
@@ -175,7 +187,6 @@ where
 {
     fn from(t: Tooltip<'a, Message>) -> Self {
         if t.disabled {
-            // If disabled, just return the child
             t.child
         } else {
             // Create tooltip with Shoelace styling
@@ -189,7 +200,7 @@ where
             let mut tooltip_widget =
                 widgets::tooltip::Tooltip::new(t.child, tooltip_container, t.placement.into())
                     .gap(t.distance)
-                    .padding(SPACING.x_small);
+                    .duration(t.duration);
 
             // When hoist is true, we don't snap to viewport to allow overflow
             tooltip_widget = tooltip_widget.snap_within_viewport(!t.hoist);

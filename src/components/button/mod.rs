@@ -3,6 +3,7 @@ use crate::{
     components::hovered,
     theme::{
         Theme,
+        button::{ButtonSize, ButtonStyleClass, ButtonVariant},
         sizes::{BORDER_RADIUS, FONT_SIZE, LINE_HEIGHT, SPACING},
     },
 };
@@ -12,38 +13,6 @@ use iced::{
     widget::{self, Component, component, text},
 };
 use iced_widget::Row;
-
-/// Button variant types matching Shoelace design system
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum Variant {
-    #[default]
-    Default,
-    Primary,
-    Success,
-    Neutral,
-    Warning,
-    Danger,
-    Text,
-}
-
-/// Button size options matching Shoelace design system
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum Size {
-    Small,
-    #[default]
-    Medium,
-    Large,
-}
-
-/// Style class for custom button styling
-#[derive(Debug, Clone, Copy)]
-pub struct ButtonStyleClass {
-    pub variant: Variant,
-    pub outline: bool,
-    pub border_radius: Radius,
-    pub hovered: bool,
-    pub disabled: bool,
-}
 
 /// A Shoelace-style button component for iced
 ///
@@ -59,8 +28,8 @@ pub struct ButtonStyleClass {
 /// - Prefix and suffix icons/content
 pub struct Button<Message> {
     label: String,
-    variant: Variant,
-    size: Size,
+    variant: ButtonVariant,
+    size: ButtonSize,
     outline: bool,
     pill: bool,
     loading: bool,
@@ -76,8 +45,8 @@ impl<Message> Button<Message> {
     pub fn new(label: impl Into<String>) -> Self {
         Self {
             label: label.into(),
-            variant: Variant::Default,
-            size: Size::Medium,
+            variant: ButtonVariant::Default,
+            size: ButtonSize::Medium,
             outline: false,
             pill: false,
             loading: false,
@@ -96,13 +65,13 @@ impl<Message> Button<Message> {
     }
 
     /// Sets the button variant
-    pub fn variant(mut self, variant: Variant) -> Self {
+    pub fn variant(mut self, variant: ButtonVariant) -> Self {
         self.variant = variant;
         self
     }
 
     /// Sets the button size
-    pub fn size(mut self, size: Size) -> Self {
+    pub fn size(mut self, size: ButtonSize) -> Self {
         self.size = size;
         self
     }
@@ -153,9 +122,9 @@ impl<Message> Button<Message> {
     fn get_padding(&self) -> Padding {
         // Following Shoelace spec: small (0.5rem, 1rem), medium (0.75rem, 1.5rem), large (1rem, 2rem)
         match self.size {
-            Size::Small => Padding::from([SPACING.x_small, SPACING.medium]), // 8px, 16px
-            Size::Medium => Padding::from([SPACING.small, SPACING.x_large]), // 12px, 28px (close to 24px)
-            Size::Large => Padding::from([SPACING.medium, SPACING.x2_large]), // 16px, 36px (close to 32px)
+            ButtonSize::Small => Padding::from([SPACING.x_small, SPACING.medium]), // 8px, 16px
+            ButtonSize::Medium => Padding::from([SPACING.small, SPACING.x_large]), // 12px, 28px (close to 24px)
+            ButtonSize::Large => Padding::from([SPACING.medium, SPACING.x2_large]), // 16px, 36px (close to 32px)
         }
     }
 
@@ -170,9 +139,9 @@ impl<Message> Button<Message> {
             BORDER_RADIUS.x_large * 10.0
         } else {
             match self.size {
-                Size::Small => BORDER_RADIUS.small,
-                Size::Medium => BORDER_RADIUS.medium,
-                Size::Large => BORDER_RADIUS.large,
+                ButtonSize::Small => BORDER_RADIUS.small,
+                ButtonSize::Medium => BORDER_RADIUS.medium,
+                ButtonSize::Large => BORDER_RADIUS.large,
             }
         };
 
@@ -182,9 +151,9 @@ impl<Message> Button<Message> {
     /// Gets the appropriate font size
     fn get_font_size(&self) -> f32 {
         match self.size {
-            Size::Small => FONT_SIZE.small,
-            Size::Medium => FONT_SIZE.medium,
-            Size::Large => FONT_SIZE.large,
+            ButtonSize::Small => FONT_SIZE.small,
+            ButtonSize::Medium => FONT_SIZE.medium,
+            ButtonSize::Large => FONT_SIZE.large,
         }
     }
 }

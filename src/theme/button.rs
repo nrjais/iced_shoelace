@@ -1,9 +1,39 @@
+use iced::border::Radius;
 use iced_widget::button;
 
-use crate::{
-    components::button::{ButtonStyleClass, Variant},
-    theme::Theme,
-};
+use crate::theme::Theme;
+
+/// Button variant types matching Shoelace design system
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum ButtonVariant {
+    #[default]
+    Default,
+    Primary,
+    Success,
+    Neutral,
+    Warning,
+    Danger,
+    Text,
+}
+
+/// Button size options matching Shoelace design system
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum ButtonSize {
+    Small,
+    #[default]
+    Medium,
+    Large,
+}
+
+/// Style class for custom button styling
+#[derive(Debug, Clone, Copy)]
+pub struct ButtonStyleClass {
+    pub variant: ButtonVariant,
+    pub outline: bool,
+    pub border_radius: Radius,
+    pub hovered: bool,
+    pub disabled: bool,
+}
 
 // Implement button Catalog trait
 impl button::Catalog for Theme {
@@ -11,9 +41,9 @@ impl button::Catalog for Theme {
 
     fn default<'a>() -> Self::Class<'a> {
         ButtonStyleClass {
-            variant: Variant::Default,
+            variant: ButtonVariant::Default,
             outline: false,
-            border_radius: iced::border::Radius::from(4.0),
+            border_radius: Radius::from(4.0),
             hovered: false,
             disabled: false,
         }
@@ -21,24 +51,24 @@ impl button::Catalog for Theme {
 
     fn style(&self, class: &Self::Class<'_>, status: button::Status) -> button::Style {
         let tokens = self.tokens();
-        let is_hovered = class.hovered;
+        let is_hovered = class.hovered || matches!(status, button::Status::Hovered);
         let is_pressed = matches!(status, button::Status::Pressed);
         let is_disabled = class.disabled;
 
         // Determine the base color scale based on variant
         let color_scale = match class.variant {
-            Variant::Default => tokens.neutral,
-            Variant::Primary => tokens.primary,
-            Variant::Success => tokens.success,
-            Variant::Neutral => tokens.neutral,
-            Variant::Warning => tokens.warning,
-            Variant::Danger => tokens.danger,
-            Variant::Text => tokens.primary,
+            ButtonVariant::Default => tokens.neutral,
+            ButtonVariant::Primary => tokens.primary,
+            ButtonVariant::Success => tokens.success,
+            ButtonVariant::Neutral => tokens.neutral,
+            ButtonVariant::Warning => tokens.warning,
+            ButtonVariant::Danger => tokens.danger,
+            ButtonVariant::Text => tokens.primary,
         };
 
         let (background, text_color, border_color, shadow_color) = if is_disabled {
             // Disabled state - use neutral 300/400 for muted appearance
-            let (bg, border) = if class.variant == Variant::Text || class.outline {
+            let (bg, border) = if class.variant == ButtonVariant::Text || class.outline {
                 (iced::Color::TRANSPARENT, tokens.neutral.c300)
             } else {
                 (tokens.neutral.c300, tokens.neutral.c300)
@@ -66,7 +96,7 @@ impl button::Catalog for Theme {
             let border = color_scale.c600; // Border matches text color
 
             (bg, text, border, iced::Color::TRANSPARENT)
-        } else if class.variant == Variant::Text {
+        } else if class.variant == ButtonVariant::Text {
             // Text buttons - minimal style with hover background
             let bg = if is_pressed {
                 color_scale.c100
@@ -82,7 +112,7 @@ impl button::Catalog for Theme {
                 iced::Color::TRANSPARENT,
                 iced::Color::TRANSPARENT,
             )
-        } else if class.variant == Variant::Default {
+        } else if class.variant == ButtonVariant::Default {
             // Default (neutral) variant - Shoelace uses neutral-0 background with border
             let bg = if is_pressed {
                 tokens.neutral.c100
@@ -118,7 +148,7 @@ impl button::Catalog for Theme {
         };
 
         // Apply shadow for filled buttons
-        let shadow = if !is_disabled && class.variant != Variant::Text && !class.outline {
+        let shadow = if !is_disabled && class.variant != ButtonVariant::Text && !class.outline {
             iced::Shadow {
                 color: shadow_color,
                 offset: iced::Vector::new(0.0, 1.0),
@@ -137,7 +167,7 @@ impl button::Catalog for Theme {
             text_color,
             border: iced::Border {
                 color: border_color,
-                width: if class.outline || class.variant == Variant::Default {
+                width: if class.outline || class.variant == ButtonVariant::Default {
                     1.0
                 } else {
                     0.0
