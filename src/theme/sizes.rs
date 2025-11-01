@@ -83,37 +83,37 @@ pub struct ZIndex {
 
 // Border radius tokens (in pixels)
 pub const BORDER_RADIUS: BorderRadius = BorderRadius {
-    small: 3.0,    // 0.1875rem
-    medium: 4.0,   // 0.25rem
-    large: 8.0,    // 0.5rem
-    x_large: 16.0, // 1rem
+    small: 2.0,     // 0.1667rem
+    medium: 3.0,    // 0.25rem
+    large: 6.0,     // 0.5rem
+    x_large: 12.0,  // 1rem
 };
 
 // Spacing tokens (in pixels)
 pub const SPACING: Spacing = Spacing {
-    x3_small: 2.0,  // 0.125rem
-    x2_small: 4.0,  // 0.25rem
-    x_small: 8.0,   // 0.5rem
-    small: 12.0,    // 0.75rem
-    medium: 16.0,   // 1rem
-    large: 20.0,    // 1.25rem
-    x_large: 28.0,  // 1.75rem
-    x2_large: 36.0, // 2.25rem
-    x3_large: 48.0, // 3rem
-    x4_large: 72.0, // 4.5rem
+    x3_small: 1.0,    // 0.0833rem
+    x2_small: 2.0,    // 0.1667rem
+    x_small: 4.0,     // 0.3333rem
+    small: 6.0,       // 0.5rem
+    medium: 12.0,     // 1rem
+    large: 15.0,      // 1.25rem
+    x_large: 21.0,    // 1.75rem
+    x2_large: 27.0,   // 2.25rem
+    x3_large: 36.0,   // 3rem
+    x4_large: 54.0,   // 4.5rem
 };
 
 // Font sizes (in pixels)
 pub const FONT_SIZE: FontSize = FontSize {
-    x2_small: 10.0, // 0.625rem
-    x_small: 12.0,  // 0.75rem
-    small: 14.0,    // 0.875rem
-    medium: 16.0,   // 1rem
-    large: 20.0,    // 1.25rem
-    x_large: 24.0,  // 1.5rem
-    x2_large: 36.0, // 2.25rem
-    x3_large: 48.0, // 3rem
-    x4_large: 72.0, // 4.5rem
+    x2_small: 7.0,    // 0.5833rem
+    x_small: 9.0,     // 0.75rem
+    small: 11.0,      // 0.9167rem
+    medium: 12.0,     // 1rem
+    large: 15.0,      // 1.25rem
+    x_large: 18.0,    // 1.5rem
+    x2_large: 27.0,   // 2.25rem
+    x3_large: 36.0,   // 3rem
+    x4_large: 54.0,   // 4.5rem
 };
 
 // Font weights
@@ -135,16 +135,16 @@ pub const LINE_HEIGHT: LineHeight = LineHeight {
 
 // Input heights (in pixels)
 pub const INPUT_HEIGHT: InputHeight = InputHeight {
-    small: 30.0,  // 1.875rem
-    medium: 40.0, // 2.5rem
-    large: 50.0,  // 3.125rem
+    small: 23.0,   // 1.9167rem
+    medium: 32.0,  // 2.6667rem
+    large: 38.0,   // 3.1667rem
 };
 
 // Toggle sizes (in pixels)
 pub const TOGGLE_SIZE: ToggleSize = ToggleSize {
-    small: 14.0,  // 0.875rem
-    medium: 18.0, // 1.125rem
-    large: 22.0,  // 1.375rem
+    small: 10.0,   // 0.8333rem
+    medium: 14.0,  // 1.1667rem
+    large: 16.0,   // 1.3333rem
 };
 
 // Z-index values

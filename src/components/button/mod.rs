@@ -3,11 +3,11 @@ use crate::{
     components::hovered,
     theme::{
         Theme,
-        sizes::{BORDER_RADIUS, FONT_SIZE, SPACING},
+        sizes::{BORDER_RADIUS, FONT_SIZE, LINE_HEIGHT, SPACING},
     },
 };
 use iced::{
-    Padding,
+    Alignment, Padding,
     border::Radius,
     widget::{self, Component, component, text},
 };
@@ -217,6 +217,7 @@ where
         let padding = self.get_padding();
         let border_radius = self.get_border_radius();
         let font_size = self.get_font_size();
+        let line_height = LINE_HEIGHT.dense;
 
         // Build label text with optional caret
         let label_str = if self.loading {
@@ -245,23 +246,37 @@ where
             };
 
             // Build the button content with prefix, label, and suffix
-            let mut row_content = Row::new().spacing(SPACING.x2_small);
+            let mut row_content = Row::new()
+                .spacing(SPACING.x2_small)
+                .align_y(Alignment::Center);
 
             // Add prefix if present
             if let Some(prefix_text) = &prefix
                 && !prefix_text.is_empty()
             {
-                row_content = row_content.push(text(prefix_text.clone()).size(font_size));
+                row_content = row_content.push(
+                    text(prefix_text.clone())
+                        .size(font_size)
+                        .line_height(line_height),
+                );
             }
 
-            // Add main label
-            row_content = row_content.push(text(label_str.clone()).size(font_size));
+            // Add main label with proper typography
+            row_content = row_content.push(
+                text(label_str.clone())
+                    .size(font_size)
+                    .line_height(line_height),
+            );
 
             // Add suffix if present
             if let Some(suffix_text) = &suffix
                 && !suffix_text.is_empty()
             {
-                row_content = row_content.push(text(suffix_text.clone()).size(font_size));
+                row_content = row_content.push(
+                    text(suffix_text.clone())
+                        .size(font_size)
+                        .line_height(line_height),
+                );
             }
 
             let button_content: Element<'a, Event> = row_content.into();
