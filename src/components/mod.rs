@@ -8,6 +8,7 @@ pub mod card;
 pub mod checkbox;
 pub mod divider;
 pub mod hovered;
+pub mod menu_label;
 pub mod scrollable;
 pub mod tooltip;
 
@@ -22,5 +23,6 @@ pub use card::Card;
 pub use checkbox::{Checkbox, CheckboxSize, checkbox};
 pub use divider::{Divider, divider};
 pub use hovered::{Hovered, hovered};
+pub use menu_label::{MenuLabel, menu_label};
 pub use scrollable::{Direction, scrollable, scrollable_with};
 pub use tooltip::{Placement as TooltipPlacement, Tooltip, tooltip};
