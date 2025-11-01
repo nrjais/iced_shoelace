@@ -9,8 +9,7 @@ use crate::{
     },
 };
 use iced::{
-    Alignment, Border, Color, Padding, Shadow,
-    border::Radius,
+    Alignment, Padding, Shadow,
     widget::{Component, component, container, text},
 };
 use iced_core::Length;
@@ -281,11 +280,9 @@ where
         let container_style = ContainerStyleClass::Custom {
             background: background_color,
             text_color: None,
-            border: Border {
-                color: Color::TRANSPARENT,
-                width: 0.0,
-                radius: Radius::from(BORDER_RADIUS.small),
-            },
+            border_color: None,
+            border_width: 0.0,
+            border_radius: BORDER_RADIUS.small,
             shadow: Shadow::default(),
             snap: false,
         };

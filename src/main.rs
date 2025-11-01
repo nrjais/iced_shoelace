@@ -34,6 +34,7 @@ pub enum Page {
     Dividers,
     MenuItems,
     MenuLabels,
+    Menus,
     Scrollables,
     Tooltips,
 }
@@ -53,6 +54,7 @@ impl Page {
             Self::Dividers,
             Self::MenuItems,
             Self::MenuLabels,
+            Self::Menus,
             Self::Scrollables,
             Self::Tooltips,
         ]
@@ -71,6 +73,7 @@ impl Page {
             Self::Dividers => "Dividers",
             Self::MenuItems => "Menu Items",
             Self::MenuLabels => "Menu Labels",
+            Self::Menus => "Menus",
             Self::Scrollables => "Scrollables",
             Self::Tooltips => "Tooltips",
         }

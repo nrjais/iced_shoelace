@@ -39,7 +39,9 @@ pub enum ContainerStyleClass {
     Custom {
         background: Option<ColorToken>,
         text_color: Option<ColorToken>,
-        border: Border,
+        border_color: Option<ColorToken>,
+        border_width: f32,
+        border_radius: f32,
         shadow: Shadow,
         snap: bool,
     },
@@ -136,18 +138,12 @@ impl container::Catalog for Theme {
                 // Card styling matching Shoelace design
                 // Uses --sl-panel-border-color (neutral-200), --sl-border-radius-medium, --sl-shadow-x-small
                 // See: https://github.com/shoelace-style/shoelace/blob/next/src/components/card/card.styles.ts
-                // Light theme: white background (neutral-0) on light gray page (neutral-50)
-                // Dark theme: lighter panel (neutral-100) on dark page (neutral-0/50)
-                let (background, text_color, border_color) = match self {
-                    crate::theme::Theme::Light => {
-                        (tokens.neutral_0, tokens.neutral.c700, tokens.neutral.c200)
-                    }
-                    crate::theme::Theme::Dark => (
-                        tokens.neutral.c100, // Slightly lighter than page background
-                        tokens.neutral.c900,
-                        tokens.neutral.c200,
-                    ),
-                };
+                // Uses ColorToken for theme-aware colors
+                let background = tokens.neutral_0; // White in light, black in dark
+                let text_color =
+                    ColorToken::new(ColorVariant::Neutral, ColorValue::C700).get_color(tokens);
+                let border_color =
+                    ColorToken::new(ColorVariant::Neutral, ColorValue::C200).get_color(tokens);
 
                 container::Style {
                     background: Some(Background::Color(background)),
@@ -210,12 +206,18 @@ impl container::Catalog for Theme {
                 // Uses --sl-panel-background-color (neutral-0), --sl-panel-border-color (neutral-200)
                 // --sl-border-radius-medium, --sl-shadow-x-large
                 // See: https://github.com/shoelace-style/shoelace/blob/next/src/components/dialog/dialog.styles.ts
-                // Shoelace elevation token --sl-shadow-x-large: 0 8px 25px -8px hsl(240 3.8% 46.1% / 15%)
+                // Uses ColorToken for theme-aware colors
+                let background = tokens.neutral_0; // White in light, black in dark
+                let text_color =
+                    ColorToken::new(ColorVariant::Neutral, ColorValue::C700).get_color(tokens);
+                let border_color =
+                    ColorToken::new(ColorVariant::Neutral, ColorValue::C200).get_color(tokens);
+
                 container::Style {
-                    background: Some(Background::Color(tokens.neutral_0)),
-                    text_color: Some(tokens.neutral.c700),
+                    background: Some(Background::Color(background)),
+                    text_color: Some(text_color),
                     border: Border {
-                        color: tokens.neutral.c200,
+                        color: border_color,
                         width: 1.,
                         radius: BORDER_RADIUS.medium.into(),
                     },
@@ -254,7 +256,9 @@ impl container::Catalog for Theme {
             ContainerStyleClass::Custom {
                 background,
                 text_color,
-                border,
+                border_color,
+                border_width,
+                border_radius,
                 shadow,
                 snap,
             } => {
@@ -262,11 +266,18 @@ impl container::Catalog for Theme {
                     .map(|color| color.get_color(tokens))
                     .map(Background::Color);
                 let txt_color = text_color.map(|color| color.get_color(tokens));
+                let border_clr = border_color
+                    .map(|color| color.get_color(tokens))
+                    .unwrap_or(Color::TRANSPARENT);
 
                 container::Style {
                     background: bg,
                     text_color: txt_color,
-                    border: *border,
+                    border: Border {
+                        color: border_clr,
+                        width: *border_width,
+                        radius: (*border_radius).into(),
+                    },
                     shadow: *shadow,
                     snap: *snap,
                 }

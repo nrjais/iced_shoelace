@@ -17,6 +17,7 @@ mod dialogs;
 mod dividers;
 mod menu_items;
 mod menu_labels;
+mod menus;
 mod overview;
 mod scrollables;
 mod tooltips;
@@ -90,6 +91,7 @@ fn page_content<'a>(page: Page, dialog_state: &'a DialogState) -> Element<'a, Me
         Page::Dividers => dividers::page(),
         Page::MenuItems => menu_items::page(),
         Page::MenuLabels => menu_labels::page(),
+        Page::Menus => menus::page(),
         Page::Scrollables => scrollables::page(),
         Page::Tooltips => tooltips::page(),
     };
