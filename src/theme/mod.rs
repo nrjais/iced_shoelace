@@ -8,9 +8,9 @@ pub mod checkbox;
 pub mod container;
 pub mod pallete;
 pub mod scrollable;
+pub mod sizes;
 pub mod text;
 pub mod tokens;
-pub mod sizes;
 
 pub use scrollable::ScrollableClass;
 

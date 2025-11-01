@@ -2,6 +2,7 @@ use crate::components::button::Button;
 use crate::theme::Theme;
 use crate::theme::button::ButtonVariant;
 use crate::theme::container::ContainerStyleClass;
+use crate::theme::sizes::SPACING;
 use crate::widgets::overlay::Overlay;
 use crate::{Element, Message};
 
@@ -52,9 +53,9 @@ pub fn view(state: &DialogState) -> Element<'static, Message> {
             no_header_dialog(state.show_no_header),
             scroll_dialog(state.show_scroll),
         ]
-        .spacing(20),
+        .spacing(SPACING.large),
     )
-    .padding(20)
+    .padding(SPACING.large)
     .into()
 }
 
@@ -66,20 +67,21 @@ fn basic_dialog(show: bool) -> Element<'static, Message> {
     if show {
         let dialog_content = container(
             column![
-                // Header
+                // Header - uses Shoelace's --header-spacing (medium = 16px)
                 container(text("Dialog Title").size(20))
-                    .padding(20)
-                    .width(Fill),
-                // Content
+                    .padding(SPACING.large)
+                    .width(Fill)
+                    .class(ContainerStyleClass::DialogHeader),
+                // Content - uses Shoelace's --body-spacing (large = 20px for better readability)
                 container(
                     column![
                         text("This is a basic dialog."),
                         text("It has a title, content, and footer with action buttons."),
                     ]
-                    .spacing(10)
+                    .spacing(SPACING.small)
                 )
-                .padding(20),
-                // Footer with right-aligned buttons
+                .padding(SPACING.large),
+                // Footer with right-aligned buttons - uses Shoelace's --footer-spacing (large = 20px)
                 container(
                     Row::with_children([
                         Button::new("Cancel")
@@ -91,10 +93,10 @@ fn basic_dialog(show: bool) -> Element<'static, Message> {
                             .on_press(Message::Dialog(DialogMessage::CloseBasic))
                             .into(),
                     ])
-                    .spacing(10)
+                    .spacing(SPACING.small)
                     .align_y(Alignment::Center)
                 )
-                .padding(20)
+                .padding(SPACING.large)
                 .width(Fill)
                 .align_x(Alignment::End)
                 .class(ContainerStyleClass::DialogFooter),
@@ -102,7 +104,7 @@ fn basic_dialog(show: bool) -> Element<'static, Message> {
             .spacing(0),
         )
         .width(Length::Fixed(500.0))
-        .class(ContainerStyleClass::Card);
+        .class(ContainerStyleClass::Dialog);
 
         Overlay::new(trigger, dialog_content)
             .backdrop_color(Color::from_rgba(0.0, 0.0, 0.0, 0.5))
@@ -123,24 +125,25 @@ fn custom_width_dialog(show: bool) -> Element<'static, Message> {
             column![
                 // Header
                 container(text("Custom Width Dialog").size(20))
-                    .padding(20)
-                    .width(Fill),
+                    .padding(SPACING.large)
+                    .width(Fill)
+                    .class(ContainerStyleClass::DialogHeader),
                 // Content
                 container(
                     column![
                         text("This dialog has a custom width."),
                         text("You can set the width using the width() method."),
                     ]
-                    .spacing(10)
+                    .spacing(SPACING.small)
                 )
-                .padding(20),
+                .padding(SPACING.large),
                 // Footer
                 container(
                     Button::new("Close")
                         .variant(ButtonVariant::Primary)
                         .on_press(Message::Dialog(DialogMessage::CloseCustomWidth))
                 )
-                .padding(20)
+                .padding(SPACING.large)
                 .width(Fill)
                 .align_x(Alignment::End)
                 .class(ContainerStyleClass::DialogFooter),
@@ -148,7 +151,7 @@ fn custom_width_dialog(show: bool) -> Element<'static, Message> {
             .spacing(0),
         )
         .width(Fill)
-        .class(ContainerStyleClass::Card);
+        .class(ContainerStyleClass::Dialog);
 
         Overlay::new(trigger, dialog_content)
             .backdrop_color(Color::from_rgba(0.0, 0.0, 0.0, 0.5))
@@ -173,16 +176,16 @@ fn no_header_dialog(show: bool) -> Element<'static, Message> {
                         text("This dialog has no header.").size(20),
                         text("Content can be displayed without a header bar."),
                     ]
-                    .spacing(10)
+                    .spacing(SPACING.small)
                 )
-                .padding(20),
+                .padding(SPACING.large),
                 // Footer
                 container(
                     Button::new("Close")
                         .variant(ButtonVariant::Primary)
                         .on_press(Message::Dialog(DialogMessage::CloseNoHeader))
                 )
-                .padding(20)
+                .padding(SPACING.large)
                 .width(Fill)
                 .align_x(Alignment::End)
                 .class(ContainerStyleClass::DialogFooter),
@@ -190,7 +193,7 @@ fn no_header_dialog(show: bool) -> Element<'static, Message> {
             .spacing(0),
         )
         .width(Length::Fixed(500.0))
-        .class(ContainerStyleClass::Card);
+        .class(ContainerStyleClass::Dialog);
 
         Overlay::new(trigger, dialog_content)
             .backdrop_color(Color::from_rgba(0.0, 0.0, 0.0, 0.5))
@@ -207,7 +210,7 @@ fn scroll_dialog(show: bool) -> Element<'static, Message> {
         .on_press(Message::Dialog(DialogMessage::OpenScroll));
 
     if show {
-        let mut content: Column<'static, Message, Theme> = column![].spacing(10);
+        let mut content: Column<'static, Message, Theme> = column![].spacing(SPACING.small);
 
         for i in 1..=30 {
             content = content.push(text(format!("Line {} of scrolling content", i)));
@@ -217,17 +220,18 @@ fn scroll_dialog(show: bool) -> Element<'static, Message> {
             column![
                 // Header
                 container(text("Scrolling Dialog").size(20))
-                    .padding(20)
-                    .width(Fill),
+                    .padding(SPACING.large)
+                    .width(Fill)
+                    .class(ContainerStyleClass::DialogHeader),
                 // Scrollable content
-                container(content).padding(20),
+                container(content).padding(SPACING.large),
                 // Footer
                 container(
                     Button::new("Close")
                         .variant(ButtonVariant::Primary)
                         .on_press(Message::Dialog(DialogMessage::CloseScroll))
                 )
-                .padding(20)
+                .padding(SPACING.large)
                 .width(Fill)
                 .align_x(Alignment::End)
                 .class(ContainerStyleClass::DialogFooter),
@@ -235,7 +239,7 @@ fn scroll_dialog(show: bool) -> Element<'static, Message> {
             .spacing(0),
         )
         .width(Length::Fixed(500.0))
-        .class(ContainerStyleClass::Card);
+        .class(ContainerStyleClass::Dialog);
 
         Overlay::new(trigger, dialog_content)
             .backdrop_color(Color::from_rgba(0.0, 0.0, 0.0, 0.5))

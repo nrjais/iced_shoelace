@@ -4,11 +4,10 @@ use crate::theme::{
     Theme,
     badge::BadgeVariant,
     pallete::{ColorToken, ColorValue, ColorVariant},
-    sizes::BORDER_RADIUS,
+    sizes::{BORDER_RADIUS, FONT_SIZE},
 };
 
-#[derive(Debug, Clone, Copy)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, Default)]
 pub enum ContainerStyleClass {
     #[default]
     Default,
@@ -31,7 +30,11 @@ pub enum ContainerStyleClass {
     CardFooter,
     /// Card image - transparent background with top border radius
     CardImage,
-    /// Dialog footer - with top border
+    /// Dialog - white background with border, shadow, and rounded corners (always light)
+    Dialog,
+    /// Dialog header - transparent background with no border (separation via padding)
+    DialogHeader,
+    /// Dialog footer - transparent background with no border (separation via padding)
     DialogFooter,
     Custom {
         background: Option<ColorToken>,
@@ -41,7 +44,6 @@ pub enum ContainerStyleClass {
         snap: bool,
     },
 }
-
 
 // Implement container Catalog trait
 impl container::Catalog for Theme {
@@ -55,15 +57,25 @@ impl container::Catalog for Theme {
         let tokens = self.tokens();
 
         match class {
-            ContainerStyleClass::Default => container::Style {
-                background: Some(Background::Color(
-                    ColorToken::new(ColorVariant::Neutral, ColorValue::C50).get_color(tokens),
-                )),
-                text_color: None,
-                border: Border::default(),
-                shadow: Shadow::default(),
-                snap: true,
-            },
+            ContainerStyleClass::Default => {
+                // Default container background
+                // Light theme: light gray (neutral-50) for subtle contrast with white cards
+                // Dark theme: darkest (neutral-0) for maximum contrast with lighter cards
+                let background = match self {
+                    crate::theme::Theme::Light => {
+                        ColorToken::new(ColorVariant::Neutral, ColorValue::C50).get_color(tokens)
+                    }
+                    crate::theme::Theme::Dark => tokens.neutral_0,
+                };
+
+                container::Style {
+                    background: Some(Background::Color(background)),
+                    text_color: None,
+                    border: Border::default(),
+                    shadow: Shadow::default(),
+                    snap: true,
+                }
+            }
             ContainerStyleClass::Tooltip => {
                 // Shoelace tooltip styling
                 // Dark background with white text, medium border radius, and subtle shadow
@@ -124,12 +136,24 @@ impl container::Catalog for Theme {
                 // Card styling matching Shoelace design
                 // Uses --sl-panel-border-color (neutral-200), --sl-border-radius-medium, --sl-shadow-x-small
                 // See: https://github.com/shoelace-style/shoelace/blob/next/src/components/card/card.styles.ts
+                // Light theme: white background (neutral-0) on light gray page (neutral-50)
+                // Dark theme: lighter panel (neutral-100) on dark page (neutral-0/50)
+                let (background, text_color, border_color) = match self {
+                    crate::theme::Theme::Light => {
+                        (tokens.neutral_0, tokens.neutral.c700, tokens.neutral.c200)
+                    }
+                    crate::theme::Theme::Dark => (
+                        tokens.neutral.c100, // Slightly lighter than page background
+                        tokens.neutral.c900,
+                        tokens.neutral.c200,
+                    ),
+                };
+
                 container::Style {
-                    background: Some(Background::Color(tokens.neutral_0)),
-                    text_color: Some(tokens.neutral.c700),
+                    background: Some(Background::Color(background)),
+                    text_color: Some(text_color),
                     border: Border {
-                        color: ColorToken::new(ColorVariant::Neutral, ColorValue::C200)
-                            .get_color(tokens),
+                        color: border_color,
                         width: 1.0,
                         radius: BORDER_RADIUS.medium.into(),
                     },
@@ -181,18 +205,52 @@ impl container::Catalog for Theme {
                     snap: false,
                 }
             }
-            ContainerStyleClass::DialogFooter => container::Style {
-                background: None,
-                text_color: None,
-                border: Border {
-                    width: 1.0,
-                    color: ColorToken::new(ColorVariant::Neutral, ColorValue::C200)
-                        .get_color(tokens),
-                    radius: 0.0.into(),
-                },
-                shadow: Shadow::default(),
-                snap: false,
-            },
+            ContainerStyleClass::Dialog => {
+                // Dialog styling matching Shoelace design
+                // Uses --sl-panel-background-color (neutral-0), --sl-panel-border-color (neutral-200)
+                // --sl-border-radius-medium, --sl-shadow-x-large
+                // See: https://github.com/shoelace-style/shoelace/blob/next/src/components/dialog/dialog.styles.ts
+                // Shoelace elevation token --sl-shadow-x-large: 0 8px 25px -8px hsl(240 3.8% 46.1% / 15%)
+                container::Style {
+                    background: Some(Background::Color(tokens.neutral_0)),
+                    text_color: Some(tokens.neutral.c700),
+                    border: Border {
+                        color: tokens.neutral.c200,
+                        width: 1.,
+                        radius: BORDER_RADIUS.medium.into(),
+                    },
+                    shadow: Shadow {
+                        // Shoelace's x-large shadow: more prominent and softer than cards
+                        // --sl-shadow-x-large: 0 8px 25px -8px with 15% opacity
+                        color: Color::from_rgba(0.0, 0.0, 0.0, 0.15),
+                        offset: iced::Vector::new(0.0, 8.0),
+                        blur_radius: 25.0,
+                    },
+                    snap: false,
+                }
+            }
+            ContainerStyleClass::DialogHeader => {
+                // Dialog header - no border (Iced doesn't support bottom-only borders)
+                // Separation from body is achieved through padding
+                container::Style {
+                    background: None,
+                    text_color: None,
+                    border: Border::default(),
+                    shadow: Shadow::default(),
+                    snap: false,
+                }
+            }
+            ContainerStyleClass::DialogFooter => {
+                // Dialog footer - no border (Iced doesn't support top-only borders)
+                // Separation from body is achieved through padding
+                container::Style {
+                    background: None,
+                    text_color: None,
+                    border: Border::default(),
+                    shadow: Shadow::default(),
+                    snap: false,
+                }
+            }
             ContainerStyleClass::Custom {
                 background,
                 text_color,
