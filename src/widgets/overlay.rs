@@ -320,7 +320,7 @@ where
             inherited_style,
             content_layout,
             cursor,
-            &Rectangle::with_size(Size::INFINITE),
+            &layout.bounds(),
         );
     }
 
@@ -336,7 +336,7 @@ where
             self.tree,
             content_layout,
             cursor,
-            &Rectangle::with_size(Size::INFINITE),
+            &layout.bounds(),
             renderer,
         )
     }

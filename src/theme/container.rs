@@ -4,7 +4,7 @@ use crate::theme::{
     Theme,
     badge::BadgeVariant,
     pallete::{ColorToken, ColorValue, ColorVariant},
-    sizes::{BORDER_RADIUS, FONT_SIZE},
+    sizes::BORDER_RADIUS,
 };
 
 #[derive(Debug, Clone, Copy, Default)]
