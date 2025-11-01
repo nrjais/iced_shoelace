@@ -19,8 +19,7 @@ fn main() -> iced::Result {
     .run()
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Page {
     #[default]
     Overview,
@@ -33,6 +32,7 @@ pub enum Page {
     Dialogs,
     Dividers,
     Dropdowns,
+    Inputs,
     MenuItems,
     MenuLabels,
     Menus,
@@ -40,7 +40,6 @@ pub enum Page {
     Scrollables,
     Tooltips,
 }
-
 
 impl Page {
     pub fn all() -> Vec<Self> {
@@ -55,6 +54,7 @@ impl Page {
             Self::Dialogs,
             Self::Dividers,
             Self::Dropdowns,
+            Self::Inputs,
             Self::MenuItems,
             Self::MenuLabels,
             Self::Menus,
@@ -76,6 +76,7 @@ impl Page {
             Self::Dialogs => "Dialogs",
             Self::Dividers => "Dividers",
             Self::Dropdowns => "Dropdowns",
+            Self::Inputs => "Inputs",
             Self::MenuItems => "Menu Items",
             Self::MenuLabels => "Menu Labels",
             Self::Menus => "Menus",
@@ -91,16 +92,19 @@ struct Gallery {
     theme: Theme,
     current_page: Page,
     dialog_state: gallery::DialogState,
+    input_state: gallery::InputState,
 }
 
 #[derive(Debug, Clone)]
 pub enum Message {
     ButtonPressed(String),
     CheckboxChanged(String, bool),
+    InputChanged(String, String),
     MenuItemSelected,
     SwitchTheme(Theme),
     NavigateToPage(Page),
     Dialog(gallery::DialogMessage),
+    Input(gallery::InputMessage),
 }
 
 impl Gallery {
@@ -115,6 +119,11 @@ impl Gallery {
             Message::CheckboxChanged(label, checked) => {
                 let mut stdout = std::io::stdout();
                 writeln!(stdout, "Checkbox '{}' changed to: {}", label, checked).ok();
+                Task::none()
+            }
+            Message::InputChanged(label, value) => {
+                let mut stdout = std::io::stdout();
+                writeln!(stdout, "Input '{}' changed to: {}", label, value).ok();
                 Task::none()
             }
             Message::MenuItemSelected => {
@@ -134,11 +143,15 @@ impl Gallery {
                 gallery::handle_dialog_message(&mut self.dialog_state, msg);
                 Task::none()
             }
+            Message::Input(msg) => {
+                gallery::handle_input_message(&mut self.input_state, msg);
+                Task::none()
+            }
         }
     }
 
     fn view(&self) -> Element<'_, Message> {
-        gallery::view(self.current_page, &self.dialog_state)
+        gallery::view(self.current_page, &self.dialog_state, &self.input_state)
     }
 
     fn theme(&self) -> Theme {

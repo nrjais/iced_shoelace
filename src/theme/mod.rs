@@ -6,6 +6,7 @@ pub mod badge;
 pub mod button;
 pub mod checkbox;
 pub mod container;
+pub mod input;
 pub mod pallete;
 pub mod rule;
 pub mod scrollable;

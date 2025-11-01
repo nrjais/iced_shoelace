@@ -16,6 +16,7 @@ mod checkboxes;
 mod dialogs;
 mod dividers;
 mod dropdowns;
+mod inputs;
 mod menu_items;
 mod menu_labels;
 mod menus;
@@ -25,11 +26,12 @@ mod scrollables;
 mod tooltips;
 
 pub use dialogs::{DialogMessage, DialogState, handle_dialog_message};
+pub use inputs::{InputMessage, InputState, handle_input_message};
 
-pub fn view<'a>(current_page: Page, dialog_state: &'a DialogState) -> Element<'a, Message> {
+pub fn view<'a>(current_page: Page, dialog_state: &'a DialogState, input_state: &'a InputState) -> Element<'a, Message> {
     let content = Row::new()
         .push(navigation_sidebar(current_page))
-        .push(page_content(current_page, dialog_state));
+        .push(page_content(current_page, dialog_state, input_state));
 
     container(content)
         .width(Length::Fill)
@@ -85,7 +87,7 @@ fn navigation_sidebar(current_page: Page) -> Element<'static, Message> {
         .into()
 }
 
-fn page_content<'a>(page: Page, dialog_state: &'a DialogState) -> Element<'a, Message> {
+fn page_content<'a>(page: Page, dialog_state: &'a DialogState, input_state: &'a InputState) -> Element<'a, Message> {
     let content: Element<'a, Message> = match page {
         Page::Overview => overview::page(),
         Page::Badges => badges::page(),
@@ -97,6 +99,7 @@ fn page_content<'a>(page: Page, dialog_state: &'a DialogState) -> Element<'a, Me
         Page::Dialogs => dialogs::view(dialog_state),
         Page::Dividers => dividers::page(),
         Page::Dropdowns => dropdowns::page(),
+        Page::Inputs => inputs::view(input_state),
         Page::MenuItems => menu_items::page(),
         Page::MenuLabels => menu_labels::page(),
         Page::Menus => menus::page(),
