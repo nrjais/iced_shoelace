@@ -1,4 +1,4 @@
-use iced::border::Radius;
+use iced::{Background, border::Radius};
 use iced_widget::button;
 
 use crate::theme::Theme;
@@ -163,7 +163,7 @@ impl button::Catalog for Theme {
         };
 
         button::Style {
-            background: Some(iced::Background::Color(background)),
+            background: Some(Background::Color(background)),
             text_color,
             border: iced::Border {
                 color: border_color,

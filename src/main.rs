@@ -62,7 +62,6 @@ impl Page {
 #[derive(Debug, Default)]
 struct Gallery {
     theme: Theme,
-    button_count: usize,
     current_page: Page,
 }
 
@@ -78,14 +77,8 @@ impl Gallery {
         use std::io::Write;
         match message {
             Message::ButtonPressed(label) => {
-                self.button_count += 1;
                 let mut stdout = std::io::stdout();
-                writeln!(
-                    stdout,
-                    "Button '{}' pressed! Total clicks: {}",
-                    label, self.button_count
-                )
-                .ok();
+                writeln!(stdout, "Button '{}' pressed!", label).ok();
                 Task::none()
             }
             Message::SwitchTheme(theme) => {
@@ -100,7 +93,7 @@ impl Gallery {
     }
 
     fn view(&self) -> Element<'_, Message> {
-        gallery::view(self.current_page, self.button_count)
+        gallery::view(self.current_page)
     }
 
     fn theme(&self) -> Theme {

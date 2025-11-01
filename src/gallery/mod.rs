@@ -11,10 +11,10 @@ use crate::theme::button::{ButtonSize, ButtonVariant};
 use crate::theme::{ScrollableClass, Theme};
 use crate::{Element, Message, Page};
 
-pub fn view(current_page: Page, button_count: usize) -> Element<'static, Message> {
+pub fn view(current_page: Page) -> Element<'static, Message> {
     let content = Row::new()
         .push(navigation_sidebar(current_page))
-        .push(page_content(current_page, button_count));
+        .push(page_content(current_page));
 
     container(content)
         .width(Length::Fill)
@@ -65,9 +65,9 @@ fn navigation_sidebar(current_page: Page) -> Element<'static, Message> {
         .into()
 }
 
-fn page_content(page: Page, button_count: usize) -> Element<'static, Message> {
+fn page_content(page: Page) -> Element<'static, Message> {
     let content = match page {
-        Page::Overview => overview_page(button_count),
+        Page::Overview => overview_page(),
         Page::Badges => badges_page(),
         Page::Buttons => buttons_page(),
         Page::ButtonGroups => button_groups_page(),
@@ -81,7 +81,7 @@ fn page_content(page: Page, button_count: usize) -> Element<'static, Message> {
         .into()
 }
 
-fn overview_page(button_count: usize) -> Element<'static, Message> {
+fn overview_page() -> Element<'static, Message> {
     let title = text("Shoelace Component Gallery").size(32);
     let subtitle = text("A comprehensive showcase of all Shoelace-inspired components").size(16);
 
@@ -91,8 +91,6 @@ fn overview_page(button_count: usize) -> Element<'static, Message> {
         with various styles and configurations.",
     )
     .size(14);
-
-    let counter = text(format!("Total button clicks: {}", button_count)).size(18);
 
     // Quick preview of each component
     let preview_title = text("Quick Preview").size(24);
@@ -135,7 +133,6 @@ fn overview_page(button_count: usize) -> Element<'static, Message> {
         title,
         subtitle,
         description,
-        counter,
         preview_title,
         badge_preview,
         button_preview,
