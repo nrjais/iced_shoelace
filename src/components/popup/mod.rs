@@ -1,8 +1,4 @@
-use crate::{
-    Element,
-    theme::container::ContainerStyleClass,
-};
-use iced::widget::container;
+use crate::{Element, theme::container::ContainerStyleClass, widgets::tooltip::{Position, Tooltip}};
 use std::time::Duration;
 
 /// Popup placement options matching Shoelace design system
@@ -28,20 +24,20 @@ pub enum Placement {
     LeftEnd,
 }
 
-impl From<Placement> for crate::widgets::tooltip::Position {
+impl From<Placement> for Position {
     fn from(placement: Placement) -> Self {
         match placement {
             Placement::Top | Placement::TopStart | Placement::TopEnd => {
-                crate::widgets::tooltip::Position::Top
+                Position::Top
             }
             Placement::Bottom | Placement::BottomStart | Placement::BottomEnd => {
-                crate::widgets::tooltip::Position::Bottom
+                Position::Bottom
             }
             Placement::Left | Placement::LeftStart | Placement::LeftEnd => {
-                crate::widgets::tooltip::Position::Left
+                Position::Left
             }
             Placement::Right | Placement::RightStart | Placement::RightEnd => {
-                crate::widgets::tooltip::Position::Right
+                Position::Right
             }
         }
     }
@@ -148,7 +144,7 @@ impl<'a, Message> Popup<'a, Message> {
             arrow: false,
             flip: true,
             shift: true,
-            style: ContainerStyleClass::Card,
+            style: ContainerStyleClass::Default,
             duration: Duration::from_millis(0), // Show immediately by default
         }
     }
@@ -246,20 +242,13 @@ where
             // If not active, just show the anchor without the popup
             popup.anchor
         } else {
-            // Wrap content in styled container
-            let popup_container = container(popup.content).class(popup.style);
-
             // Use the tooltip widget infrastructure for positioning
             // This provides overlay positioning relative to the anchor
-            let popup_widget = crate::widgets::tooltip::Tooltip::new(
-                popup.anchor,
-                popup_container,
-                popup.placement.into(),
-            )
-            .gap(popup.distance)
-            .class(popup.style)
-            .duration(popup.duration)
-            .snap_within_viewport(popup.shift);
+            let popup_widget = Tooltip::new(popup.anchor, popup.content, popup.placement.into())
+                .gap(popup.distance)
+                .class(popup.style)
+                .duration(popup.duration)
+                .snap_within_viewport(popup.shift);
 
             popup_widget.into()
         }
@@ -297,4 +286,3 @@ where
 {
     Popup::new(anchor, content, active)
 }
-

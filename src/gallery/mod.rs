@@ -72,7 +72,12 @@ fn navigation_sidebar(current_page: Page) -> Element<'static, Message> {
         nav_buttons = nav_buttons.push(button);
     }
 
-    container(nav_buttons)
+    // Wrap in scrollable to allow scrolling through all pages
+    let scrollable_nav = scrollable(nav_buttons)
+        .width(Length::Fill)
+        .height(Length::Fill);
+
+    container(scrollable_nav)
         .width(200)
         .height(Length::Fill)
         .padding(10)
