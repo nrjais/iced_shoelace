@@ -8,7 +8,9 @@ use crate::theme::{
 };
 
 #[derive(Debug, Clone, Copy)]
+#[derive(Default)]
 pub enum ContainerStyleClass {
+    #[default]
     Default,
     Tooltip,
     /// Button group container - transparent with no styling
@@ -29,6 +31,8 @@ pub enum ContainerStyleClass {
     CardFooter,
     /// Card image - transparent background with top border radius
     CardImage,
+    /// Dialog footer - with top border
+    DialogFooter,
     Custom {
         background: Option<ColorToken>,
         text_color: Option<ColorToken>,
@@ -38,11 +42,6 @@ pub enum ContainerStyleClass {
     },
 }
 
-impl Default for ContainerStyleClass {
-    fn default() -> Self {
-        Self::Default
-    }
-}
 
 // Implement container Catalog trait
 impl container::Catalog for Theme {
@@ -58,7 +57,7 @@ impl container::Catalog for Theme {
         match class {
             ContainerStyleClass::Default => container::Style {
                 background: Some(Background::Color(
-                    ColorToken::new(ColorVariant::NeutralBase, ColorValue::C50).get_color(tokens),
+                    ColorToken::new(ColorVariant::Neutral, ColorValue::C50).get_color(tokens),
                 )),
                 text_color: None,
                 border: Border::default(),
@@ -123,20 +122,21 @@ impl container::Catalog for Theme {
             }
             ContainerStyleClass::Card => {
                 // Card styling matching Shoelace design
-                // White/neutral background with subtle border, shadow, and rounded corners
+                // Uses --sl-panel-border-color (neutral-200), --sl-border-radius-medium, --sl-shadow-x-small
+                // See: https://github.com/shoelace-style/shoelace/blob/next/src/components/card/card.styles.ts
                 container::Style {
                     background: Some(Background::Color(tokens.neutral_0)),
-                    text_color: Some(tokens.neutral.c900),
+                    text_color: Some(tokens.neutral.c700),
                     border: Border {
                         color: ColorToken::new(ColorVariant::Neutral, ColorValue::C200)
                             .get_color(tokens),
                         width: 1.0,
-                        radius: BORDER_RADIUS.large.into(),
+                        radius: BORDER_RADIUS.medium.into(),
                     },
                     shadow: Shadow {
                         color: Color::from_rgba(0.0, 0.0, 0.0, 0.1),
-                        offset: iced::Vector::new(0.0, 2.0),
-                        blur_radius: 8.0,
+                        offset: iced::Vector::new(0.0, 1.0),
+                        blur_radius: 3.0,
                     },
                     snap: false,
                 }
@@ -181,6 +181,18 @@ impl container::Catalog for Theme {
                     snap: false,
                 }
             }
+            ContainerStyleClass::DialogFooter => container::Style {
+                background: None,
+                text_color: None,
+                border: Border {
+                    width: 1.0,
+                    color: ColorToken::new(ColorVariant::Neutral, ColorValue::C200)
+                        .get_color(tokens),
+                    radius: 0.0.into(),
+                },
+                shadow: Shadow::default(),
+                snap: false,
+            },
             ContainerStyleClass::Custom {
                 background,
                 text_color,

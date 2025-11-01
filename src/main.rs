@@ -20,7 +20,9 @@ fn main() -> iced::Result {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default)]
 pub enum Page {
+    #[default]
     Overview,
     Badges,
     Breadcrumbs,
@@ -28,15 +30,11 @@ pub enum Page {
     ButtonGroups,
     Cards,
     Checkboxes,
+    Dialogs,
     Scrollables,
     Tooltips,
 }
 
-impl Default for Page {
-    fn default() -> Self {
-        Self::Overview
-    }
-}
 
 impl Page {
     pub fn all() -> Vec<Self> {
@@ -48,6 +46,7 @@ impl Page {
             Self::ButtonGroups,
             Self::Cards,
             Self::Checkboxes,
+            Self::Dialogs,
             Self::Scrollables,
             Self::Tooltips,
         ]
@@ -62,6 +61,7 @@ impl Page {
             Self::ButtonGroups => "Button Groups",
             Self::Cards => "Cards",
             Self::Checkboxes => "Checkboxes",
+            Self::Dialogs => "Dialogs",
             Self::Scrollables => "Scrollables",
             Self::Tooltips => "Tooltips",
         }
@@ -72,6 +72,7 @@ impl Page {
 struct Gallery {
     theme: Theme,
     current_page: Page,
+    dialog_state: gallery::DialogState,
 }
 
 #[derive(Debug, Clone)]
@@ -80,6 +81,7 @@ pub enum Message {
     CheckboxChanged(String, bool),
     SwitchTheme(Theme),
     NavigateToPage(Page),
+    Dialog(gallery::DialogMessage),
 }
 
 impl Gallery {
@@ -104,11 +106,15 @@ impl Gallery {
                 self.current_page = page;
                 Task::none()
             }
+            Message::Dialog(msg) => {
+                gallery::handle_dialog_message(&mut self.dialog_state, msg);
+                Task::none()
+            }
         }
     }
 
     fn view(&self) -> Element<'_, Message> {
-        gallery::view(self.current_page)
+        gallery::view(self.current_page, &self.dialog_state)
     }
 
     fn theme(&self) -> Theme {

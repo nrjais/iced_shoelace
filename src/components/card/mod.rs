@@ -97,38 +97,31 @@ where
             card_column = card_column.push(image_container);
         }
 
-        let has_header = card.header.is_some();
-
-        // Add header if present (with horizontal padding but reduced vertical padding)
+        // Add header if present (with padding)
+        // Shoelace uses --sl-spacing-large for all card sections
         if let Some(header) = card.header {
             let header_container = container(header)
                 .width(Length::Fill)
-                .padding([card.padding, card.padding])
+                .padding(card.padding)
                 .class(ContainerStyleClass::CardHeader);
 
             card_column = card_column.push(header_container);
         }
 
-        // Add main content (with full padding)
-        let content_padding = if has_header {
-            // If there's a header, reduce top padding of content
-            card.padding * 0.5
-        } else {
-            card.padding
-        };
-
+        // Add main content (with padding)
+        // Shoelace applies consistent padding to body content
         let content_container = container(card.content)
             .width(Length::Fill)
-            .padding(content_padding)
+            .padding(card.padding)
             .class(ContainerStyleClass::CardContent);
 
         card_column = card_column.push(content_container);
 
-        // Add footer if present (with horizontal padding but reduced vertical padding)
+        // Add footer if present (with padding)
         if let Some(footer) = card.footer {
             let footer_container = container(footer)
                 .width(Length::Fill)
-                .padding([card.padding, card.padding])
+                .padding(card.padding)
                 .class(ContainerStyleClass::CardFooter);
 
             card_column = card_column.push(footer_container);

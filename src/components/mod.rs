@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 use crate::theme::Theme;
 
 pub mod badge;
@@ -24,20 +22,3 @@ pub use checkbox::{Checkbox, CheckboxSize, checkbox};
 pub use hovered::{Hovered, hovered};
 pub use scrollable::{Direction, scrollable, scrollable_with};
 pub use tooltip::{Placement as TooltipPlacement, Tooltip, tooltip};
-
-pub struct ElementBox<'a, Message> {
-    element: RefCell<Element<'a, Message>>,
-}
-
-impl<'a, Message> ElementBox<'a, Message> {
-    pub fn new(element: impl Into<Element<'a, Message>>) -> Self {
-        Self {
-            element: RefCell::new(element.into()),
-        }
-    }
-
-    pub fn take(&self) -> Element<'a, Message> {
-        let empty = None::<Element<'a, Message>>.into();
-        self.element.replace(empty)
-    }
-}

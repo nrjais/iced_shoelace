@@ -24,7 +24,7 @@ pub fn scrollable_with<'a, Message>(
     base: impl Into<Element<'a, Message>>,
     direction: Direction,
 ) -> Scrollable<'a, Message, Theme> {
-    let scrollbar_width = SPACING.medium; // 12.0
+    let scrollbar_width = SPACING.small; // 12.0
 
     let scrollbar: Scrollbar = Scrollbar::default()
         .spacing(0)

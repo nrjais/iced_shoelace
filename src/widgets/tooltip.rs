@@ -483,7 +483,7 @@ where
             self.state,
             renderer,
             theme,
-            &inherited_style,
+            inherited_style,
             layout.children().next().unwrap(),
             cursor_position,
             &Rectangle::with_size(Size::INFINITE),

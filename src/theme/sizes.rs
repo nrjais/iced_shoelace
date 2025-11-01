@@ -71,49 +71,41 @@ pub struct ToggleSize {
     pub large: f32,
 }
 
-/// Z-index tokens
-#[derive(Debug, Clone, Copy)]
-pub struct ZIndex {
-    pub drawer: i32,
-    pub dialog: i32,
-    pub dropdown: i32,
-    pub toast: i32,
-    pub tooltip: i32,
-}
-
 // Border radius tokens (in pixels)
+// Shoelace values: small=3px (0.1875rem), medium=4px (0.25rem), large=8px (0.5rem), x-large=16px (1rem)
 pub const BORDER_RADIUS: BorderRadius = BorderRadius {
-    small: 2.0,     // 0.1667rem
-    medium: 3.0,    // 0.25rem
-    large: 6.0,     // 0.5rem
-    x_large: 12.0,  // 1rem
+    small: 3.0,    // 0.1875rem
+    medium: 4.0,   // 0.25rem
+    large: 8.0,    // 0.5rem
+    x_large: 16.0, // 1rem
 };
 
 // Spacing tokens (in pixels)
+// Shoelace spacing: 3xs=1px, 2xs=2px, xs=4px, s=8px, m=16px, l=20px, xl=28px, 2xl=36px, 3xl=48px, 4xl=72px
 pub const SPACING: Spacing = Spacing {
-    x3_small: 1.0,    // 0.0833rem
-    x2_small: 2.0,    // 0.1667rem
-    x_small: 4.0,     // 0.3333rem
-    small: 6.0,       // 0.5rem
-    medium: 12.0,     // 1rem
-    large: 15.0,      // 1.25rem
-    x_large: 21.0,    // 1.75rem
-    x2_large: 27.0,   // 2.25rem
-    x3_large: 36.0,   // 3rem
-    x4_large: 54.0,   // 4.5rem
+    x3_small: 1.0,  // 0.0625rem (1px)
+    x2_small: 2.0,  // 0.125rem (2px)
+    x_small: 4.0,   // 0.25rem (4px)
+    small: 8.0,     // 0.5rem (8px)
+    medium: 16.0,   // 1rem (16px)
+    large: 20.0,    // 1.25rem (20px)
+    x_large: 28.0,  // 1.75rem (28px)
+    x2_large: 36.0, // 2.25rem (36px)
+    x3_large: 48.0, // 3rem (48px)
+    x4_large: 72.0, // 4.5rem (72px)
 };
 
 // Font sizes (in pixels)
 pub const FONT_SIZE: FontSize = FontSize {
-    x2_small: 7.0,    // 0.5833rem
-    x_small: 9.0,     // 0.75rem
-    small: 11.0,      // 0.9167rem
-    medium: 12.0,     // 1rem
-    large: 15.0,      // 1.25rem
-    x_large: 18.0,    // 1.5rem
-    x2_large: 27.0,   // 2.25rem
-    x3_large: 36.0,   // 3rem
-    x4_large: 54.0,   // 4.5rem
+    x2_small: 7.0,  // 0.5833rem
+    x_small: 9.0,   // 0.75rem
+    small: 11.0,    // 0.9167rem
+    medium: 12.0,   // 1rem
+    large: 15.0,    // 1.25rem
+    x_large: 18.0,  // 1.5rem
+    x2_large: 27.0, // 2.25rem
+    x3_large: 36.0, // 3rem
+    x4_large: 54.0, // 4.5rem
 };
 
 // Font weights
@@ -135,23 +127,14 @@ pub const LINE_HEIGHT: LineHeight = LineHeight {
 
 // Input heights (in pixels)
 pub const INPUT_HEIGHT: InputHeight = InputHeight {
-    small: 23.0,   // 1.9167rem
-    medium: 32.0,  // 2.6667rem
-    large: 38.0,   // 3.1667rem
+    small: 23.0,  // 1.9167rem
+    medium: 32.0, // 2.6667rem
+    large: 38.0,  // 3.1667rem
 };
 
 // Toggle sizes (in pixels)
 pub const TOGGLE_SIZE: ToggleSize = ToggleSize {
-    small: 10.0,   // 0.8333rem
-    medium: 14.0,  // 1.1667rem
-    large: 16.0,   // 1.3333rem
-};
-
-// Z-index values
-pub const Z_INDEX: ZIndex = ZIndex {
-    drawer: 700,
-    dialog: 800,
-    dropdown: 900,
-    toast: 950,
-    tooltip: 1000,
+    small: 10.0,  // 0.8333rem
+    medium: 14.0, // 1.1667rem
+    large: 16.0,  // 1.3333rem
 };

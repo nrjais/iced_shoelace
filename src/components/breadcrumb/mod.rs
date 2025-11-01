@@ -104,7 +104,6 @@ where
                     variant: crate::theme::button::ButtonVariant::Text,
                     outline: false,
                     border_radius: Radius::from(BORDER_RADIUS.medium),
-                    hovered: false,
                     disabled: false,
                 };
 

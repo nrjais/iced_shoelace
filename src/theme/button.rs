@@ -31,7 +31,6 @@ pub struct ButtonStyleClass {
     pub variant: ButtonVariant,
     pub outline: bool,
     pub border_radius: Radius,
-    pub hovered: bool,
     pub disabled: bool,
 }
 
@@ -44,14 +43,13 @@ impl button::Catalog for Theme {
             variant: ButtonVariant::Default,
             outline: false,
             border_radius: Radius::from(4.0),
-            hovered: false,
             disabled: false,
         }
     }
 
     fn style(&self, class: &Self::Class<'_>, status: button::Status) -> button::Style {
         let tokens = self.tokens();
-        let is_hovered = class.hovered || matches!(status, button::Status::Hovered);
+        let is_hovered = matches!(status, button::Status::Hovered);
         let is_pressed = matches!(status, button::Status::Pressed);
         let is_disabled = class.disabled;
 

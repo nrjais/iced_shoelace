@@ -1,6 +1,5 @@
 use crate::{
     Element,
-    components::hovered,
     theme::{
         Theme,
         button::{ButtonSize, ButtonStyleClass, ButtonVariant},
@@ -203,68 +202,63 @@ where
         let suffix = self.suffix.clone();
         let has_on_press = self.on_press.is_some();
 
-        // Use the hovered component to track hover state
-        let content: Element<'a, Event> = hovered(move |is_hovered| {
-            // Create style class with hover state
-            let style_class = ButtonStyleClass {
-                variant,
-                outline,
-                border_radius,
-                hovered: is_hovered && !disabled,
-                disabled,
-            };
+        // Create style class with hover state
+        let style_class = ButtonStyleClass {
+            variant,
+            outline,
+            border_radius,
+            disabled,
+        };
 
-            // Build the button content with prefix, label, and suffix
-            let mut row_content = Row::new()
-                .spacing(SPACING.x2_small)
-                .align_y(Alignment::Center);
+        // Build the button content with prefix, label, and suffix
+        let mut row_content = Row::new()
+            .spacing(SPACING.x2_small)
+            .align_y(Alignment::Center);
 
-            // Add prefix if present
-            if let Some(prefix_text) = &prefix
-                && !prefix_text.is_empty()
-            {
-                row_content = row_content.push(
-                    text(prefix_text.clone())
-                        .size(font_size)
-                        .line_height(line_height),
-                );
-            }
-
-            // Add main label with proper typography
+        // Add prefix if present
+        if let Some(prefix_text) = &prefix
+            && !prefix_text.is_empty()
+        {
             row_content = row_content.push(
-                text(label_str.clone())
+                text(prefix_text.clone())
                     .size(font_size)
                     .line_height(line_height),
             );
+        }
 
-            // Add suffix if present
-            if let Some(suffix_text) = &suffix
-                && !suffix_text.is_empty()
-            {
-                row_content = row_content.push(
-                    text(suffix_text.clone())
-                        .size(font_size)
-                        .line_height(line_height),
-                );
-            }
+        // Add main label with proper typography
+        row_content = row_content.push(
+            text(label_str.clone())
+                .size(font_size)
+                .line_height(line_height),
+        );
 
-            let button_content: Element<'a, Event> = row_content.into();
+        // Add suffix if present
+        if let Some(suffix_text) = &suffix
+            && !suffix_text.is_empty()
+        {
+            row_content = row_content.push(
+                text(suffix_text.clone())
+                    .size(font_size)
+                    .line_height(line_height),
+            );
+        }
 
-            // Build the button
-            let btn = widget::button(button_content)
-                .padding(padding)
-                .class(style_class)
-                .on_press_maybe(if !loading && !disabled && has_on_press {
-                    Some(Event::Pressed)
-                } else {
-                    None
-                });
+        let button_content: Element<'a, Event> = row_content.into();
 
-            let element: Element<'a, Event> = btn.into();
-            element
-        });
+        // Build the button
+        let btn = widget::button(button_content)
+            .padding(padding)
+            .class(style_class)
+            .on_press_maybe(if !loading && !disabled && has_on_press {
+                Some(Event::Pressed)
+            } else {
+                None
+            });
 
-        content.map(|_message| Event::Pressed)
+        let element: Element<'a, Event> = btn.into();
+
+        element.map(|_message| Event::Pressed)
     }
 }
 

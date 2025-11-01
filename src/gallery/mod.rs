@@ -13,14 +13,17 @@ mod button_groups;
 mod buttons;
 mod cards;
 mod checkboxes;
+mod dialogs;
 mod overview;
 mod scrollables;
 mod tooltips;
 
-pub fn view(current_page: Page) -> Element<'static, Message> {
+pub use dialogs::{DialogMessage, DialogState, handle_dialog_message};
+
+pub fn view<'a>(current_page: Page, dialog_state: &'a DialogState) -> Element<'a, Message> {
     let content = Row::new()
         .push(navigation_sidebar(current_page))
-        .push(page_content(current_page));
+        .push(page_content(current_page, dialog_state));
 
     container(content)
         .width(Length::Fill)
@@ -71,8 +74,8 @@ fn navigation_sidebar(current_page: Page) -> Element<'static, Message> {
         .into()
 }
 
-fn page_content(page: Page) -> Element<'static, Message> {
-    let content = match page {
+fn page_content<'a>(page: Page, dialog_state: &'a DialogState) -> Element<'a, Message> {
+    let content: Element<'a, Message> = match page {
         Page::Overview => overview::page(),
         Page::Badges => badges::page(),
         Page::Breadcrumbs => breadcrumbs::page(),
@@ -80,6 +83,7 @@ fn page_content(page: Page) -> Element<'static, Message> {
         Page::ButtonGroups => button_groups::page(),
         Page::Cards => cards::page(),
         Page::Checkboxes => checkboxes::page(),
+        Page::Dialogs => dialogs::view(dialog_state),
         Page::Scrollables => scrollables::page(),
         Page::Tooltips => tooltips::page(),
     };
