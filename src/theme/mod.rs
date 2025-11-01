@@ -2,6 +2,7 @@ use iced::theme;
 
 use crate::theme::tokens::Tokens;
 
+pub mod badge;
 pub mod button;
 pub mod container;
 pub mod pallete;

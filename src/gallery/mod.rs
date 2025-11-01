@@ -1,10 +1,12 @@
 use iced::{Length, alignment};
 use iced_widget::{Row, column, text};
 
+use crate::components::Badge;
 use crate::components::button::Button;
 use crate::components::button_group::button_group_with;
 use crate::components::scrollable;
 use crate::components::{TooltipPlacement, tooltip};
+use crate::theme::badge::BadgeVariant as BadgeVar;
 use crate::theme::button::{ButtonSize, ButtonVariant};
 use crate::theme::{ScrollableClass, Theme};
 use crate::{Element, Message};
@@ -16,6 +18,78 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let theme_light = Button::new("Light Theme").on_press(Message::SwitchTheme(Theme::Light));
 
     let theme_row = Row::with_children([theme_dark.into(), theme_light.into()]).spacing(10);
+
+    // Badges section
+    let badges_title = text("Badges").size(24);
+    let badges_desc = text("Use badges to highlight important information").size(14);
+
+    // Badge variants
+    let badge_variants_row = Row::with_children([
+        Badge::new("Primary")
+            .variant(BadgeVar::Primary)
+            .into(),
+        Badge::new("Success")
+            .variant(BadgeVar::Success)
+            .into(),
+        Badge::new("Neutral")
+            .variant(BadgeVar::Neutral)
+            .into(),
+        Badge::new("Warning")
+            .variant(BadgeVar::Warning)
+            .into(),
+        Badge::new("Danger")
+            .variant(BadgeVar::Danger)
+            .into(),
+    ])
+    .spacing(10)
+    .align_y(alignment::Vertical::Center);
+
+    // Pill badges
+    let pill_badges_title = text("Pill Badges").size(18);
+    let pill_badges_row = Row::with_children([
+        Badge::new("Primary")
+            .variant(BadgeVar::Primary)
+            .pill(true)
+            .into(),
+        Badge::new("Success")
+            .variant(BadgeVar::Success)
+            .pill(true)
+            .into(),
+        Badge::new("Neutral")
+            .variant(BadgeVar::Neutral)
+            .pill(true)
+            .into(),
+        Badge::new("Warning")
+            .variant(BadgeVar::Warning)
+            .pill(true)
+            .into(),
+        Badge::new("Danger")
+            .variant(BadgeVar::Danger)
+            .pill(true)
+            .into(),
+    ])
+    .spacing(10)
+    .align_y(alignment::Vertical::Center);
+
+    // Pulse badges
+    let pulse_badges_title = text("Pulse Badges (Animated)").size(18);
+    let pulse_badges_row = Row::with_children([
+        Badge::new("1")
+            .variant(BadgeVar::Primary)
+            .pulse(true)
+            .into(),
+        Badge::new("New")
+            .variant(BadgeVar::Success)
+            .pulse(true)
+            .into(),
+        Badge::new("!")
+            .variant(BadgeVar::Danger)
+            .pulse(true)
+            .into(),
+    ])
+    .spacing(10)
+    .align_y(alignment::Vertical::Center);
+
     // Variants section
     let variants_title = text("Variants").size(24);
     let variants_row = Row::with_children([
@@ -379,6 +453,13 @@ pub fn view(button_count: usize) -> Element<'static, Message> {
     let content = column![
         title,
         theme_row,
+        badges_title,
+        badges_desc,
+        badge_variants_row,
+        pill_badges_title,
+        pill_badges_row,
+        pulse_badges_title,
+        pulse_badges_row,
         variants_title,
         variants_row,
         sizes_title,

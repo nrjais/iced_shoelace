@@ -2,6 +2,7 @@ use iced::{Background, Border, Color, Shadow, widget::container};
 
 use crate::theme::{
     Theme,
+    badge::BadgeVariant,
     pallete::{ColorToken, ColorValue, ColorVariant},
     sizes::BORDER_RADIUS,
 };
@@ -12,6 +13,12 @@ pub enum ContainerStyleClass {
     Tooltip,
     /// Button group container - transparent with no styling
     ButtonGroup,
+    /// Badge container with variant styling
+    Badge {
+        variant: BadgeVariant,
+        border_radius: f32,
+        pulse: bool,
+    },
     Custom {
         background: Option<ColorToken>,
         text_color: Option<ColorToken>,
@@ -75,6 +82,33 @@ impl container::Catalog for Theme {
                     background: None,
                     text_color: None,
                     border: Border::default(),
+                    shadow: Shadow::default(),
+                    snap: false,
+                }
+            }
+            ContainerStyleClass::Badge {
+                variant,
+                border_radius,
+                pulse: _pulse,
+            } => {
+                // Badge styling matching Shoelace design
+                // Note: pulse animation is not implemented in the static style
+                let (background, text_color) = match variant {
+                    BadgeVariant::Primary => (tokens.primary.c600, tokens.neutral_0),
+                    BadgeVariant::Success => (tokens.success.c600, tokens.neutral_0),
+                    BadgeVariant::Neutral => (tokens.neutral.c600, tokens.neutral_0),
+                    BadgeVariant::Warning => (tokens.warning.c600, tokens.neutral_0),
+                    BadgeVariant::Danger => (tokens.danger.c600, tokens.neutral_0),
+                };
+
+                container::Style {
+                    background: Some(Background::Color(background)),
+                    text_color: Some(text_color),
+                    border: Border {
+                        color: background,
+                        width: 0.0,
+                        radius: (*border_radius).into(),
+                    },
                     shadow: Shadow::default(),
                     snap: false,
                 }
