@@ -31,6 +31,7 @@ pub enum Page {
     Cards,
     Checkboxes,
     Dialogs,
+    Dividers,
     Scrollables,
     Tooltips,
 }
@@ -47,6 +48,7 @@ impl Page {
             Self::Cards,
             Self::Checkboxes,
             Self::Dialogs,
+            Self::Dividers,
             Self::Scrollables,
             Self::Tooltips,
         ]
@@ -62,6 +64,7 @@ impl Page {
             Self::Cards => "Cards",
             Self::Checkboxes => "Checkboxes",
             Self::Dialogs => "Dialogs",
+            Self::Dividers => "Dividers",
             Self::Scrollables => "Scrollables",
             Self::Tooltips => "Tooltips",
         }

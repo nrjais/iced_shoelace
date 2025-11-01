@@ -14,6 +14,7 @@ mod buttons;
 mod cards;
 mod checkboxes;
 mod dialogs;
+mod dividers;
 mod overview;
 mod scrollables;
 mod tooltips;
@@ -84,6 +85,7 @@ fn page_content<'a>(page: Page, dialog_state: &'a DialogState) -> Element<'a, Me
         Page::Cards => cards::page(),
         Page::Checkboxes => checkboxes::page(),
         Page::Dialogs => dialogs::view(dialog_state),
+        Page::Dividers => dividers::page(),
         Page::Scrollables => scrollables::page(),
         Page::Tooltips => tooltips::page(),
     };

@@ -7,6 +7,7 @@ pub mod button;
 pub mod checkbox;
 pub mod container;
 pub mod pallete;
+pub mod rule;
 pub mod scrollable;
 pub mod sizes;
 pub mod text;
