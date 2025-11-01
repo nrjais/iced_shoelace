@@ -317,7 +317,6 @@ where
                 positioning: self.position,
                 gap: self.gap,
                 padding: self.padding,
-                class: &self.class,
             })))
         } else {
             None
@@ -376,7 +375,6 @@ enum State {
 
 struct Overlay<'a, 'b, Message, Theme, Renderer>
 where
-    Theme: container::Catalog,
     Renderer: text::Renderer,
 {
     position: Point,
@@ -388,13 +386,11 @@ where
     positioning: Position,
     gap: f32,
     padding: f32,
-    class: &'b Theme::Class<'a>,
 }
 
 impl<Message, Theme, Renderer> overlay::Overlay<Message, Theme, Renderer>
     for Overlay<'_, '_, Message, Theme, Renderer>
 where
-    Theme: container::Catalog,
     Renderer: text::Renderer,
 {
     fn layout(&mut self, renderer: &Renderer, bounds: Size) -> layout::Node {
@@ -483,19 +479,11 @@ where
         layout: Layout<'_>,
         cursor_position: mouse::Cursor,
     ) {
-        let style = theme.style(self.class);
-
-        container::draw_background(renderer, &style, layout.bounds());
-
-        let defaults = renderer::Style {
-            text_color: style.text_color.unwrap_or(inherited_style.text_color),
-        };
-
         self.tooltip.as_widget().draw(
             self.state,
             renderer,
             theme,
-            &defaults,
+            &inherited_style,
             layout.children().next().unwrap(),
             cursor_position,
             &Rectangle::with_size(Size::INFINITE),
