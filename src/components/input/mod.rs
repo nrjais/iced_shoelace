@@ -1,17 +1,15 @@
-use crate::components::button::Button;
 use crate::{
     Element,
     theme::{
         Theme,
-        button::ButtonVariant,
         input::InputStyleClass,
         pallete::{ColorToken, ColorValue, ColorVariant},
         sizes::{FONT_SIZE, INPUT_HEIGHT, LINE_HEIGHT, SPACING},
         text::TextStyleClass,
     },
 };
-use iced::widget::{Component, component, row, text, text_input};
-use iced::{Alignment, Length};
+use iced::Length;
+use iced::widget::{Component, component, text, text_input};
 use iced_widget::Column;
 
 /// Size variants for input
@@ -75,9 +73,6 @@ pub enum InputType {
 /// - Help text support
 /// - Label support
 /// - Placeholder text
-/// - Clearable button
-/// - Password toggle button
-/// - Min/max length constraints
 /// - Required field marking
 pub struct Input<Message> {
     label: Option<String>,
@@ -90,14 +85,8 @@ pub struct Input<Message> {
     filled: bool,
     pill: bool,
     help_text: Option<String>,
-    clearable: bool,
-    password_toggle: bool,
-    password_visible: bool,
-    min_length: Option<usize>,
-    max_length: Option<usize>,
     required: bool,
     on_input: Option<Box<dyn Fn(String) -> Message>>,
-    on_clear: Option<Message>,
 }
 
 impl<Message> Input<Message> {
@@ -114,14 +103,8 @@ impl<Message> Input<Message> {
             filled: false,
             pill: false,
             help_text: None,
-            clearable: false,
-            password_toggle: false,
-            password_visible: false,
-            min_length: None,
-            max_length: None,
             required: false,
             on_input: None,
-            on_clear: None,
         }
     }
 
@@ -188,36 +171,6 @@ impl<Message> Input<Message> {
         self
     }
 
-    /// Sets whether the input should have a clear button
-    pub fn clearable(mut self, clearable: bool) -> Self {
-        self.clearable = clearable;
-        self
-    }
-
-    /// Sets the callback that will be invoked when the clear button is pressed
-    pub fn on_clear(mut self, message: Message) -> Self {
-        self.on_clear = Some(message);
-        self
-    }
-
-    /// Sets whether password inputs should have a toggle button to show/hide
-    pub fn password_toggle(mut self, password_toggle: bool) -> Self {
-        self.password_toggle = password_toggle;
-        self
-    }
-
-    /// Sets the minimum length for the input value
-    pub fn min_length(mut self, min_length: usize) -> Self {
-        self.min_length = Some(min_length);
-        self
-    }
-
-    /// Sets the maximum length for the input value
-    pub fn max_length(mut self, max_length: usize) -> Self {
-        self.max_length = Some(max_length);
-        self
-    }
-
     /// Sets whether the input is required
     pub fn required(mut self, required: bool) -> Self {
         self.required = required;
@@ -228,54 +181,29 @@ impl<Message> Input<Message> {
 #[derive(Debug, Clone)]
 pub enum Event {
     InputChanged(String),
-    ClearPressed,
-    PasswordTogglePressed,
 }
 
 impl<'a, Message> Component<'a, Message, Theme> for Input<Message>
 where
     Message: Clone + 'a,
 {
-    type State = bool; // Track password visibility state
+    type State = ();
     type Event = Event;
 
-    fn update(&mut self, state: &mut Self::State, event: Self::Event) -> Option<Message> {
+    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<Message> {
         match event {
             Event::InputChanged(new_value) => {
                 if !self.disabled && !self.readonly {
-                    // Apply max_length constraint
-                    let constrained_value = if let Some(max_len) = self.max_length {
-                        if new_value.len() > max_len {
-                            return None; // Don't update if exceeds max length
-                        }
-                        new_value
-                    } else {
-                        new_value
-                    };
-
-                    self.value = constrained_value.clone();
-                    self.on_input.as_ref().map(|f| f(constrained_value))
+                    self.value = new_value.clone();
+                    self.on_input.as_ref().map(|f| f(new_value))
                 } else {
                     None
                 }
-            }
-            Event::ClearPressed => {
-                if !self.disabled && !self.readonly {
-                    self.value.clear();
-                    self.on_clear.clone()
-                } else {
-                    None
-                }
-            }
-            Event::PasswordTogglePressed => {
-                *state = !*state; // Toggle password visibility
-                self.password_visible = *state;
-                None
             }
         }
     }
 
-    fn view(&self, state: &Self::State) -> Element<'a, Self::Event> {
+    fn view(&self, _state: &Self::State) -> Element<'a, Self::Event> {
         let font_size = self.size.font_size();
         let spacing = self.size.spacing();
         let line_height = LINE_HEIGHT.dense;
@@ -289,12 +217,7 @@ where
         let filled = self.filled;
         let pill = self.pill;
         let input_type = self.input_type;
-        let clearable = self.clearable;
-        let password_toggle = self.password_toggle;
-        let has_value = !value.is_empty();
         let required = self.required;
-        let min_length = self.min_length;
-        let max_length = self.max_length;
 
         // Create the style class for the input
         let style_class = InputStyleClass {
@@ -306,41 +229,23 @@ where
 
         // Build the text input control
         let is_password = matches!(input_type, InputType::Password);
-        let show_password = is_password && password_toggle && *state;
 
         let text_input_control = text_input(&placeholder, &value)
             .size(font_size)
             .line_height(line_height)
             .class(style_class)
-            .secure(is_password && !show_password)
+            .secure(is_password)
+            .padding(if pill {
+                [SPACING.x_small, SPACING.medium]
+            } else {
+                [SPACING.x_small, SPACING.small]
+            })
             .on_input_maybe(if !disabled && !readonly {
                 Some(Event::InputChanged)
             } else {
                 None
             })
             .width(Length::Fill);
-
-        // Build input row with input and buttons
-        let mut input_row = row![text_input_control]
-            .spacing(SPACING.x2_small)
-            .align_y(Alignment::Center);
-
-        // Add clear button if clearable and has value
-        if clearable && has_value && !disabled && !readonly {
-            let clear_btn = Button::new("✕")
-                .variant(ButtonVariant::Text)
-                .on_press(Event::ClearPressed);
-            input_row = input_row.push(clear_btn);
-        }
-
-        // Add password toggle button if password input with toggle enabled
-        if is_password && password_toggle && !disabled {
-            let toggle_text = if *state { "👁" } else { "👁‍🗨" };
-            let toggle_btn = Button::new(toggle_text)
-                .variant(ButtonVariant::Text)
-                .on_press(Event::PasswordTogglePressed);
-            input_row = input_row.push(toggle_btn);
-        }
 
         // Build the complete control with optional label and help text
         let mut content = Column::new().spacing(spacing);
@@ -358,31 +263,11 @@ where
             content = content.push(label_style);
         }
 
-        // Add the input row
-        content = content.push(input_row);
+        // Add the input control
+        content = content.push(text_input_control);
 
-        // Add help text if present (with validation info)
-        let help_with_validation = if let Some(help) = help_text {
-            if let (Some(min), Some(max)) = (min_length, max_length) {
-                Some(format!("{} ({}-{} characters)", help, min, max))
-            } else if let Some(min) = min_length {
-                Some(format!("{} (min {} characters)", help, min))
-            } else if let Some(max) = max_length {
-                Some(format!("{} (max {} characters)", help, max))
-            } else {
-                Some(help)
-            }
-        } else if let (Some(min), Some(max)) = (min_length, max_length) {
-            Some(format!("{}-{} characters", min, max))
-        } else if let Some(min) = min_length {
-            Some(format!("Minimum {} characters", min))
-        } else if let Some(max) = max_length {
-            Some(format!("Maximum {} characters", max))
-        } else {
-            None
-        };
-
-        if let Some(help) = help_with_validation {
+        // Add help text if present
+        if let Some(help) = help_text {
             let help_style = text(help).size(FONT_SIZE.small).class(TextStyleClass {
                 color: Some(ColorToken::new(ColorVariant::Neutral, ColorValue::C500)),
             });

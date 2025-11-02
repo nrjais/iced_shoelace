@@ -259,50 +259,6 @@ pub fn view(state: &InputState) -> Element<'_, Message> {
         .value(&state.combo)
         .on_input(|value| Message::Input(InputMessage::ComboChanged(value)));
 
-    // Clearable
-    let clearable_title = text("Clearable").size(24);
-    let clearable_desc = text("Inputs can have a clear button to quickly remove the value").size(14);
-    let clearable_input = Input::new("Type something to see clear button")
-        .label("Clearable Input")
-        .value(&state.basic)
-        .clearable(true)
-        .on_input(|value| Message::Input(InputMessage::BasicChanged(value)))
-        .on_clear(Message::Input(InputMessage::BasicChanged(String::new())));
-
-    // Password Toggle
-    let password_toggle_title = text("Password Toggle").size(24);
-    let password_toggle_desc = text("Password inputs can have a toggle to show/hide the password").size(14);
-    let password_toggle_input = Input::new("Enter your password")
-        .label("Password with Toggle")
-        .input_type(InputType::Password)
-        .password_toggle(true)
-        .value(&state.password_type)
-        .on_input(|value| Message::Input(InputMessage::PasswordTypeChanged(value)));
-
-    // Min/Max Length
-    let length_title = text("Length Constraints").size(24);
-    let length_column = column![
-        Input::new("Min 3 characters")
-            .label("Username")
-            .min_length(3)
-            .value(&state.name)
-            .on_input(|value| Message::Input(InputMessage::NameChanged(value))),
-        Input::new("Max 10 characters")
-            .label("Short Code")
-            .max_length(10)
-            .value(&state.small)
-            .on_input(|value| Message::Input(InputMessage::SmallChanged(value))),
-        Input::new("Between 8-20 characters")
-            .label("Password")
-            .input_type(InputType::Password)
-            .min_length(8)
-            .max_length(20)
-            .password_toggle(true)
-            .value(&state.password)
-            .on_input(|value| Message::Input(InputMessage::PasswordChanged(value))),
-    ]
-    .spacing(15);
-
     // Required Fields
     let required_title = text("Required Fields").size(24);
     let required_desc = text("Required fields are marked with an asterisk (*)").size(14);
@@ -328,12 +284,9 @@ pub fn view(state: &InputState) -> Element<'_, Message> {
         .label("Advanced Search")
         .filled(true)
         .pill(true)
-        .clearable(true)
-        .max_length(50)
-        .help_text("Search with up to 50 characters")
+        .help_text("Type to search")
         .value(&state.search)
-        .on_input(|value| Message::Input(InputMessage::SearchChanged(value)))
-        .on_clear(Message::Input(InputMessage::SearchChanged(String::new())));
+        .on_input(|value| Message::Input(InputMessage::SearchChanged(value)));
 
     column![
         title,
@@ -362,14 +315,6 @@ pub fn view(state: &InputState) -> Element<'_, Message> {
         placeholders_column,
         combo_title,
         combo_input,
-        clearable_title,
-        clearable_desc,
-        clearable_input,
-        password_toggle_title,
-        password_toggle_desc,
-        password_toggle_input,
-        length_title,
-        length_column,
         required_title,
         required_desc,
         required_column,

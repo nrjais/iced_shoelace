@@ -38,7 +38,7 @@ impl text_input::Catalog for Theme {
     fn style(&self, class: &Self::Class<'_>, status: text_input::Status) -> text_input::Style {
         let tokens = self.tokens();
         let is_focused = matches!(status, text_input::Status::Focused { .. });
-        let is_hovered = matches!(status, text_input::Status::Hovered { .. });
+        let is_hovered = matches!(status, text_input::Status::Hovered);
         let is_disabled = class.disabled;
 
         // Determine border radius based on pill and size
